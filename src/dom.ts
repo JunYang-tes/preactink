@@ -21,8 +21,16 @@ export type ElementNames =
 
 export type NodeNames = ElementNames | TextName;
 
+export type BBox = {
+	left:number,
+	top: number,
+	width: number,
+	height: number
+}
+
 // eslint-disable-next-line @typescript-eslint/naming-convention
 export type DOMElement = {
+	bbox?: BBox
 	nodeName: ElementNames;
 	attributes: Record<string, DOMNodeAttribute>;
 	childNodes: DOMNode[];

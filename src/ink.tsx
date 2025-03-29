@@ -35,7 +35,7 @@ export default class Ink {
 	private isUnmounted: boolean;
 	private lastOutput: string;
 	private readonly container: FiberRoot;
-	private readonly rootNode: dom.DOMElement;
+	public readonly rootNode: dom.DOMElement;
 	// This variable is used only in debug mode to store full static output
 	// so that it's rerendered every time, not just new static parts, like in non-debug mode
 	private fullStaticOutput: string;

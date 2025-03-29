@@ -5,7 +5,7 @@ import wrapText from './wrap-text.js';
 import getMaxWidth from './get-max-width.js';
 import squashTextNodes from './squash-text-nodes.js';
 import renderBorder from './render-border.js';
-import {type DOMElement} from './dom.js';
+import {BBox, type DOMElement} from './dom.js';
 import type Output from './output.js';
 
 // If parent container is `<Box>`, text nodes will be treated as separate nodes in
@@ -60,6 +60,14 @@ const renderNodeToOutput = (
 		// Left and top positions in Yoga are relative to their parent node
 		const x = offsetX + yogaNode.getComputedLeft();
 		const y = offsetY + yogaNode.getComputedTop();
+
+		const bbox:BBox = {
+			left: x,
+			top: y,
+			width: yogaNode.getComputedWidth(),
+			height: yogaNode.getComputedHeight(),
+		}
+		node.bbox = bbox
 
 		// Transformers are functions that transform final text output of each component
 		// See Output class for logic that applies transformers
