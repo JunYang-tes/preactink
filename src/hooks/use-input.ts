@@ -1,6 +1,5 @@
-import {useEffect} from 'react';
-import parseKeypress, {nonAlphanumericKeys} from '../parse-keypress.js';
-import reconciler from '../reconciler.js';
+import { useEffect } from 'preact/hooks';
+import parseKeypress, { nonAlphanumericKeys } from '../parse-keypress.js';
 import useStdin from './use-stdin.js';
 
 /**
@@ -116,7 +115,7 @@ type Options = {
  */
 const useInput = (inputHandler: Handler, options: Options = {}) => {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
-	const {stdin, setRawMode, internal_exitOnCtrlC, internal_eventEmitter} =
+	const { stdin, setRawMode, internal_exitOnCtrlC, internal_eventEmitter } =
 		useStdin();
 
 	useEffect(() => {
@@ -182,10 +181,7 @@ const useInput = (inputHandler: Handler, options: Options = {}) => {
 
 			// If app is not supposed to exit on Ctrl+C, then let input listener handle it
 			if (!(input === 'c' && key.ctrl) || !internal_exitOnCtrlC) {
-				// @ts-expect-error TypeScript types for `batchedUpdates` require an argument, but React's codebase doesn't provide it and it works without it as exepected.
-				reconciler.batchedUpdates(() => {
-					inputHandler(input, key);
-				});
+				inputHandler(input, key);
 			}
 		};
 

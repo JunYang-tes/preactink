@@ -1,4 +1,4 @@
-import {useEffect, useContext, useMemo} from 'react';
+import {useEffect, useContext, useMemo} from 'preact/hooks';
 import FocusContext from '../components/FocusContext.js';
 import useStdin from './use-stdin.js';
 

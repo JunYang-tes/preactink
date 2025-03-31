@@ -8,9 +8,9 @@
 			"ES2023"
 		],
 		"sourceMap": true,
-		"jsx": "react",
-		"isolatedModules": true,
-		"lib": ["ES2023"]
+		"jsx": "react-jsx",
+		"jsxImportSource":"preact",
+		"isolatedModules": true
 	},
 	"include": ["src"],
 	"ts-node": {

@@ -1,5 +1,6 @@
-import React, {useMemo, useState, useLayoutEffect, type ReactNode} from 'react';
+import {useMemo, useState, useLayoutEffect, } from 'preact/hooks';
 import {type Styles} from '../styles.js';
+import { VNode } from 'preact';
 
 export type Props<T> = {
 	/**
@@ -17,7 +18,7 @@ export type Props<T> = {
 	 * First argument is an item itself and second argument is index of that item in `items` array.
 	 * Note that `key` must be assigned to the root component.
 	 */
-	readonly children: (item: T, index: number) => ReactNode;
+	readonly children: (item: T, index: number) => VNode;
 };
 
 /**

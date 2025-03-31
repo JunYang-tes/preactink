@@ -1,9 +1,10 @@
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import Yoga, { type Node as YogaNode } from 'yoga-layout';
 import measureText from './measure-text.js';
-import {type Styles} from './styles.js';
+import applyStyle, { type Styles } from './styles.js';
 import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
-import {type OutputTransformer} from './render-node-to-output.js';
+import { type OutputTransformer } from './render-node-to-output.js';
+
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
@@ -22,7 +23,7 @@ export type ElementNames =
 export type NodeNames = ElementNames | TextName;
 
 export type BBox = {
-	left:number,
+	left: number,
 	top: number,
 	width: number,
 	height: number
@@ -50,12 +51,12 @@ export type TextNode = {
 } & InkNode;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type DOMNode<T = {nodeName: NodeNames}> = T extends {
+export type DOMNode<T = { nodeName: NodeNames }> = T extends {
 	nodeName: infer U;
 }
 	? U extends '#text'
-		? TextNode
-		: DOMElement
+	? TextNode
+	: DOMElement
 	: never;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -64,7 +65,24 @@ export type DOMNodeAttribute = boolean | string | number;
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {
 		nodeName,
-		style: {},
+		style:
+			new Proxy({}, {
+				set(obj, prop, value) {
+					if (typeof value == 'string' && /^\d+px/.test(value)) {
+						const r = Reflect.set(obj, prop, +value.replace('px', ''))
+						if (node.yogaNode) {
+							applyStyle(node.yogaNode, obj)
+						}
+						return r
+					}
+					const r = Reflect.set(obj, prop, value)
+					if (node.yogaNode) {
+						applyStyle(node.yogaNode, obj)
+					}
+					return r
+				}
+			}
+			),
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
@@ -104,7 +122,7 @@ export const appendChildNode = (
 export const insertBeforeNode = (
 	node: DOMElement,
 	newChildNode: DOMNode,
-	beforeChildNode: DOMNode,
+	beforeChildNode: DOMNode | null,
 ): void => {
 	if (newChildNode.parentNode) {
 		removeChildNode(newChildNode.parentNode, newChildNode);
@@ -185,7 +203,7 @@ export const createTextNode = (text: string): TextNode => {
 const measureTextNode = function (
 	node: DOMNode,
 	width: number,
-): {width: number; height: number} {
+): { width: number; height: number } {
 	const text =
 		node.nodeName === '#text' ? node.nodeValue : squashTextNodes(node);
 

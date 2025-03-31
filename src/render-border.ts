@@ -69,6 +69,7 @@ const renderBorder = (
 		if (showBottomBorder) {
 			verticalBorderHeight -= 1;
 		}
+		verticalBorderHeight = Math.max(verticalBorderHeight, 0);
 
 		let leftBorder = (
 			colorize(box.left, leftBorderColor, 'foreground') + '\n'

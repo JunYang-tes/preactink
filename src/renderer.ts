@@ -10,6 +10,7 @@ type Result = {
 
 const renderer = (node: DOMElement): Result => {
 	if (node.yogaNode) {
+		debugger
 		const output = new Output({
 			width: node.yogaNode.getComputedWidth(),
 			height: node.yogaNode.getComputedHeight(),
