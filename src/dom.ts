@@ -65,24 +65,7 @@ export type DOMNodeAttribute = boolean | string | number;
 export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {
 		nodeName,
-		style:
-			new Proxy({}, {
-				set(obj, prop, value) {
-					if (typeof value == 'string' && /^\d+px/.test(value)) {
-						const r = Reflect.set(obj, prop, +value.replace('px', ''))
-						if (node.yogaNode) {
-							applyStyle(node.yogaNode, obj)
-						}
-						return r
-					}
-					const r = Reflect.set(obj, prop, value)
-					if (node.yogaNode) {
-						applyStyle(node.yogaNode, obj)
-					}
-					return r
-				}
-			}
-			),
+		style: {},
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
