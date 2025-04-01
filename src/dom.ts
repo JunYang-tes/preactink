@@ -142,7 +142,11 @@ export const insertBeforeNode = (
 
 	node.childNodes.push(newChildNode);
 
-	if (newChildNode.yogaNode) {
+	if (newChildNode.yogaNode &&
+		// in case Text inside Text, outer Text already have a measureFunction,
+		// the yogaNode with measureFunction shouldn't have child
+		(node.nodeName !=='ink-text')
+	) {
 		node.yogaNode?.insertChild(
 			newChildNode.yogaNode,
 			node.yogaNode.getChildCount(),
