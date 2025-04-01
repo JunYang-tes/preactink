@@ -145,7 +145,7 @@ export const insertBeforeNode = (
 	if (newChildNode.yogaNode &&
 		// in case Text inside Text, outer Text already have a measureFunction,
 		// the yogaNode with measureFunction shouldn't have child
-		(node.nodeName !=='ink-text')
+		(node.nodeName !== 'ink-text')
 	) {
 		node.yogaNode?.insertChild(
 			newChildNode.yogaNode,
@@ -244,11 +244,28 @@ const markNodeAsDirty = (node?: DOMNode): void => {
 	yogaNode?.markDirty();
 };
 
+// ink-text can be places inside ink-text,let's find the outmost ink-text
+const findOutmostInkText = (node: DOMNode|null): DOMNode | undefined => {
+	if(node == null) {
+		return null
+	}
+	if (node.nodeName === 'ink-text') {
+		let inkText = node;
+		let parent: DOMNode | null = node.parentNode;
+		while (parent != null && parent.nodeName == 'ink-text') {
+			inkText = parent;
+			parent = parent.parentNode;
+		}
+		return inkText
+	} else if (node.nodeName === '#text') {
+		return findOutmostInkText(node.parentNode)
+	}
+}
+
 export const setTextNodeValue = (node: TextNode, text: string): void => {
 	if (typeof text !== 'string') {
 		text = String(text);
 	}
-
 	node.nodeValue = text;
-	markNodeAsDirty(node);
+	markNodeAsDirty(findOutmostInkText(node));
 };
