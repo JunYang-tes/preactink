@@ -27,3 +27,4 @@ export { default as useFocusManager } from './hooks/use-focus-manager.js';
 export { default as measureElement } from './measure-element.js';
 export type { DOMElement } from './dom.js';
 export { default as instances } from './instances.js';
+export * from './components/ScrollView.js'
