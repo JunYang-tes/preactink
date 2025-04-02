@@ -1,9 +1,10 @@
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import Yoga, { type Node as YogaNode } from 'yoga-layout';
 import measureText from './measure-text.js';
-import {type Styles} from './styles.js';
+import applyStyle, { type Styles } from './styles.js';
 import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
-import {type OutputTransformer} from './render-node-to-output.js';
+import { type OutputTransformer } from './render-node-to-output.js';
+
 
 type InkNode = {
 	parentNode: DOMElement | undefined;
@@ -22,7 +23,7 @@ export type ElementNames =
 export type NodeNames = ElementNames | TextName;
 
 export type BBox = {
-	left:number,
+	left: number,
 	top: number,
 	width: number,
 	height: number
@@ -50,12 +51,12 @@ export type TextNode = {
 } & InkNode;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export type DOMNode<T = {nodeName: NodeNames}> = T extends {
+export type DOMNode<T = { nodeName: NodeNames }> = T extends {
 	nodeName: infer U;
 }
 	? U extends '#text'
-		? TextNode
-		: DOMElement
+	? TextNode
+	: DOMElement
 	: never;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -104,7 +105,7 @@ export const appendChildNode = (
 export const insertBeforeNode = (
 	node: DOMElement,
 	newChildNode: DOMNode,
-	beforeChildNode: DOMNode,
+	beforeChildNode: DOMNode | null,
 ): void => {
 	if (newChildNode.parentNode) {
 		removeChildNode(newChildNode.parentNode, newChildNode);
@@ -124,7 +125,11 @@ export const insertBeforeNode = (
 
 	node.childNodes.push(newChildNode);
 
-	if (newChildNode.yogaNode) {
+	if (newChildNode.yogaNode &&
+		// in case Text inside Text, outer Text already have a measureFunction,
+		// the yogaNode with measureFunction shouldn't have child
+		(node.nodeName !== 'ink-text')
+	) {
 		node.yogaNode?.insertChild(
 			newChildNode.yogaNode,
 			node.yogaNode.getChildCount(),
@@ -185,7 +190,7 @@ export const createTextNode = (text: string): TextNode => {
 const measureTextNode = function (
 	node: DOMNode,
 	width: number,
-): {width: number; height: number} {
+): { width: number; height: number } {
 	const text =
 		node.nodeName === '#text' ? node.nodeValue : squashTextNodes(node);
 
@@ -222,11 +227,28 @@ const markNodeAsDirty = (node?: DOMNode): void => {
 	yogaNode?.markDirty();
 };
 
+// ink-text can be places inside ink-text,let's find the outmost ink-text
+const findOutmostInkText = (node: DOMNode|null): DOMNode | undefined => {
+	if(node == null) {
+		return null
+	}
+	if (node.nodeName === 'ink-text') {
+		let inkText = node;
+		let parent: DOMNode | null = node.parentNode;
+		while (parent != null && parent.nodeName == 'ink-text') {
+			inkText = parent;
+			parent = parent.parentNode;
+		}
+		return inkText
+	} else if (node.nodeName === '#text') {
+		return findOutmostInkText(node.parentNode)
+	}
+}
+
 export const setTextNodeValue = (node: TextNode, text: string): void => {
 	if (typeof text !== 'string') {
 		text = String(text);
 	}
-
 	node.nodeValue = text;
-	markNodeAsDirty(node);
+	markNodeAsDirty(findOutmostInkText(node));
 };

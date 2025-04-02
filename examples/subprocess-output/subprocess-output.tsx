@@ -1,13 +1,13 @@
 import childProcess from 'node:child_process';
 import type Buffer from 'node:buffer';
-import React from 'react';
+import { useState, useEffect } from 'preact/hooks'
 import stripAnsi from 'strip-ansi';
-import {render, Text, Box} from '../../src/index.js';
+import { render, Text, Box } from '../../src/index.js';
 
 function SubprocessOutput() {
-	const [output, setOutput] = React.useState('');
+	const [output, setOutput] = useState('');
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const subProcess = childProcess.spawn('npm', [
 			'run',
 			'example',

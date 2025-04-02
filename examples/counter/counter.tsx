@@ -1,10 +1,10 @@
-import React from 'react';
+import {useState,useEffect} from 'preact/hooks'
 import {render, Text} from '../../src/index.js';
 
 function Counter() {
-	const [counter, setCounter] = React.useState(0);
+	const [counter, setCounter] = useState(0);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const timer = setInterval(() => {
 			setCounter(prevCounter => prevCounter + 1); // eslint-disable-line unicorn/prevent-abbreviations
 		}, 100);

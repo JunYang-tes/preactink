@@ -1,15 +1,15 @@
-import React from 'react';
+import {useState,useEffect} from 'preact/hooks'
 import {Box, Text, render, Static} from '../../src/index.js';
 
 function Example() {
-	const [tests, setTests] = React.useState<
+	const [tests, setTests] = useState<
 		Array<{
 			id: number;
 			title: string;
 		}>
 	>([]);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		let completedTests = 0;
 		let timer: NodeJS.Timeout | undefined;
 
@@ -38,9 +38,7 @@ function Example() {
 		<>
 			<Static items={tests}>
 				{test => (
-					<Box key={test.id}>
-						<Text color="green">✔ {test.title}</Text>
-					</Box>
+					<Text color="green">✔ {test.title}</Text>
 				)}
 			</Static>
 

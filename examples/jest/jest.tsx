@@ -1,8 +1,8 @@
-import React from 'react';
 import PQueue from 'p-queue';
+import {Component} from 'preact'
 import delay from 'delay';
 import ms from 'ms';
-import {Static, Box, render} from '../../src/index.js';
+import {Static, Box, render} from '../../src/index.ts';
 import Summary from './summary.jsx';
 import Test from './test.js';
 
@@ -31,7 +31,7 @@ type State = {
 	}>;
 };
 
-class Jest extends React.Component<Record<string, unknown>, State> {
+class Jest extends Component<Record<string, unknown>, State> {
 	constructor(properties: Record<string, unknown>) {
 		super(properties);
 

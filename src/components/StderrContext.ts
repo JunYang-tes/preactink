@@ -1,5 +1,5 @@
 import process from 'node:process';
-import {createContext} from 'react';
+import {createContext} from 'preact';
 
 export type Props = {
 	/**

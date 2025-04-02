@@ -1,4 +1,4 @@
-import React, {type ReactNode} from 'react';
+import  {type ComponentChildren} from 'preact';
 import chalk, {type ForegroundColorName} from 'chalk';
 import {type LiteralUnion} from 'type-fest';
 import colorize from '../colorize.js';
@@ -52,7 +52,7 @@ export type Props = {
 	 */
 	readonly wrap?: Styles['textWrap'];
 
-	readonly children?: ReactNode;
+	readonly children?: ComponentChildren;
 };
 
 /**

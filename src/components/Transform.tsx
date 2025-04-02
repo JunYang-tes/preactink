@@ -1,4 +1,4 @@
-import React, {type ReactNode} from 'react';
+import React, {type ComponentChildren} from 'preact';
 
 export type Props = {
 	/**
@@ -6,7 +6,7 @@ export type Props = {
 	 */
 	readonly transform: (children: string, index: number) => string;
 
-	readonly children?: ReactNode;
+	readonly children?: ComponentChildren;
 };
 
 /**

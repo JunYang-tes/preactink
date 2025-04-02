@@ -13,7 +13,9 @@
 		"isolatedModules": true,
 		"noEmitOnError": false
 	},
-	"include": ["src","./src/global.d.ts"],
+	"include": [
+		"./**/*"
+],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true,

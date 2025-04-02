@@ -14,10 +14,10 @@ const create = (stream: Writable, {showCursor = false} = {}): LogUpdate => {
 	let hasHiddenCursor = false;
 
 	const render = (str: string) => {
-		if (!showCursor && !hasHiddenCursor) {
-			cliCursor.hide();
-			hasHiddenCursor = true;
-		}
+		// if (!showCursor && !hasHiddenCursor) {
+		// 	cliCursor.hide();
+		// 	hasHiddenCursor = true;
+		// }
 
 		const output = str + '\n';
 		if (output === previousOutput) {

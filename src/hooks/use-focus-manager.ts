@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext} from 'preact/hooks';
 import FocusContext, {type Props} from '../components/FocusContext.js';
 
 type Output = {

@@ -1,4 +1,4 @@
-import {useContext} from 'react';
+import {useContext} from 'preact/hooks';
 import StdoutContext from '../components/StdoutContext.js';
 
 /**

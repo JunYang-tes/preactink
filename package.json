@@ -56,7 +56,7 @@
 		"indent-string": "^5.0.0",
 		"is-in-ci": "^1.0.0",
 		"patch-console": "^2.0.0",
-		"react-reconciler": "^0.29.0",
+		"preact": "^10.26.4",
 		"scheduler": "^0.23.0",
 		"signal-exit": "^3.0.7",
 		"slice-ansi": "^7.1.0",
@@ -74,8 +74,6 @@
 		"@types/benchmark": "^2.1.2",
 		"@types/ms": "^0.7.31",
 		"@types/node": "^22.9.0",
-		"@types/react": "^18.3.12",
-		"@types/react-reconciler": "^0.28.2",
 		"@types/scheduler": "^0.23.0",
 		"@types/signal-exit": "^3.0.0",
 		"@types/sinon": "^17.0.3",
@@ -92,8 +90,6 @@
 		"node-pty": "^1.0.0",
 		"p-queue": "^8.0.0",
 		"prettier": "^3.3.3",
-		"react": "^18.0.0",
-		"react-devtools-core": "^5.0.0",
 		"sinon": "^19.0.2",
 		"strip-ansi": "^7.1.0",
 		"ts-node": "^10.9.2",
@@ -101,17 +97,6 @@
 		"xo": "^0.59.3"
 	},
 	"peerDependencies": {
-		"@types/react": ">=18.0.0",
-		"react": ">=18.0.0",
-		"react-devtools-core": "^4.19.1"
-	},
-	"peerDependenciesMeta": {
-		"@types/react": {
-			"optional": true
-		},
-		"react-devtools-core": {
-			"optional": true
-		}
 	},
 	"ava": {
 		"workerThreads": false,
@@ -192,5 +177,6 @@
 			}
 		]
 	},
-	"prettier": "@vdemedes/prettier-config"
+	"prettier": "@vdemedes/prettier-config",
+	"packageManager": "pnpm@8.15.7+sha512.c85cd21b6da10332156b1ca2aa79c0a61ee7ad2eb0453b88ab299289e9e8ca93e6091232b25c07cbf61f6df77128d9c849e5c9ac6e44854dbd211c49f3a67adc"
 }

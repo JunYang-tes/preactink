@@ -1,5 +1,5 @@
-import React from 'react';
-import {render, Text} from '../../src/index.js';
+import { render, Text, Box } from '../../src/index.js';
+import { Suspense } from 'preact/compat'
 
 let promise: Promise<void> | undefined;
 let state: string | undefined;
@@ -40,7 +40,10 @@ function Fallback() {
 }
 
 render(
-	<React.Suspense fallback={<Fallback />}>
-		<Example />
-	</React.Suspense>,
+	<Box>
+		<Text>Suspense</Text>
+		<Suspense fallback={<Fallback />}>
+			<Example />
+		</Suspense>,
+	</Box>
 );

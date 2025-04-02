@@ -6,6 +6,7 @@ type Result = {
 	output: string;
 	outputHeight: number;
 	staticOutput: string;
+	staticOutputHeight: number;
 };
 
 const renderer = (node: DOMElement): Result => {
@@ -38,6 +39,7 @@ const renderer = (node: DOMElement): Result => {
 			// Newline at the end is needed, because static output doesn't have one, so
 			// interactive output will override last line of static output
 			staticOutput: staticOutput ? `${staticOutput.get().output}\n` : '',
+			staticOutputHeight: staticOutput ? staticOutput.get().height : 0,
 		};
 	}
 
@@ -45,6 +47,7 @@ const renderer = (node: DOMElement): Result => {
 		output: '',
 		outputHeight: 0,
 		staticOutput: '',
+		staticOutputHeight:0
 	};
 };
 

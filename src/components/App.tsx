@@ -1,6 +1,6 @@
-import {EventEmitter} from 'node:events';
+import { h, Component, VNode } from 'preact'
+import { EventEmitter } from 'node:events';
 import process from 'node:process';
-import React, {PureComponent, type ReactNode} from 'react';
 import cliCursor from 'cli-cursor';
 import AppContext from './AppContext.js';
 import StdinContext from './StdinContext.js';
@@ -14,7 +14,7 @@ const shiftTab = '\u001B[Z';
 const escape = '\u001B';
 
 type Props = {
-	readonly children: ReactNode;
+	readonly children: VNode;
 	readonly stdin: NodeJS.ReadStream;
 	readonly stdout: NodeJS.WriteStream;
 	readonly stderr: NodeJS.WriteStream;
@@ -39,14 +39,15 @@ type Focusable = {
 // Root component for all Ink apps
 // It renders stdin and stdout contexts, so that children can access them if needed
 // It also handles Ctrl+C exiting and cursor visibility
-export default class App extends PureComponent<Props, State> {
-	static displayName = 'InternalApp';
+export default class App extends Component<Props, State> {
+	static override displayName = 'InternalApp';
 
-	static getDerivedStateFromError(error: Error) {
-		return {error};
+	static override getDerivedStateFromError(error: Error) {
+		return { error };
 	}
 
 	override state = {
+		debug: process.env['INK_DEBUG'] === 'true',
 		isFocusEnabled: true,
 		activeFocusId: undefined,
 		focusables: [],
@@ -144,7 +145,7 @@ export default class App extends PureComponent<Props, State> {
 	}
 
 	handleSetRawMode = (isEnabled: boolean): void => {
-		const {stdin} = this.props;
+		const { stdin } = this.props;
 
 		if (!this.isRawModeSupported()) {
 			if (stdin === process.stdin) {
@@ -215,6 +216,10 @@ export default class App extends PureComponent<Props, State> {
 	};
 
 	handleExit = (error?: Error): void => {
+		cliCursor.show(this.props.stdout);
+		if (error && this.state.debug) {
+			console.error(error)
+		}
 		if (this.isRawModeSupported()) {
 			this.handleSetRawMode(false);
 		}
@@ -244,7 +249,7 @@ export default class App extends PureComponent<Props, State> {
 				return previousState;
 			}
 
-			return {activeFocusId: id};
+			return { activeFocusId: id };
 		});
 	};
 
@@ -274,7 +279,7 @@ export default class App extends PureComponent<Props, State> {
 		});
 	};
 
-	addFocusable = (id: string, {autoFocus}: {autoFocus: boolean}): void => {
+	addFocusable = (id: string, { autoFocus }: { autoFocus: boolean }): void => {
 		this.setState(previousState => {
 			let nextFocusId = previousState.activeFocusId;
 
