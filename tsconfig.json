@@ -10,7 +10,8 @@
 		"sourceMap": true,
 		"jsx": "react-jsx",
 		"jsxImportSource":"preact",
-		"isolatedModules": true
+		"isolatedModules": true,
+		"noEmitOnError": false
 	},
 	"include": ["src","./src/global.d.ts"],
 	"ts-node": {
