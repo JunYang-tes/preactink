@@ -1,10 +1,10 @@
-import {type ReactNode, type Key, type LegacyRef} from 'react';
+import {VNode,Key,Ref,ComponentChildren} from 'preact'
 import {type Except} from 'type-fest';
 import {type DOMElement} from './dom.js';
 import {type Styles} from './styles.js';
 
 declare global {
-	namespace JSX {
+	namespace preact.JSX {
 		// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 		interface IntrinsicElements {
 			'ink-box': Ink.Box;
@@ -16,14 +16,14 @@ declare global {
 declare namespace Ink {
 	type Box = {
 		internal_static?: boolean;
-		children?: ReactNode;
+		children?: ComponentChildren;
 		key?: Key;
-		ref?: LegacyRef<DOMElement>;
+		ref?: Ref<DOMElement>;
 		style?: Except<Styles, 'textWrap'>;
 	};
 
 	type Text = {
-		children?: ReactNode;
+		children?: ComponentChildren;
 		key?: Key;
 		style?: Styles;
 
@@ -31,3 +31,4 @@ declare namespace Ink {
 		internal_transform?: (children: string, index: number) => string;
 	};
 }
+export {}

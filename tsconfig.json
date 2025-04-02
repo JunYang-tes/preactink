@@ -12,7 +12,7 @@
 		"jsxImportSource":"preact",
 		"isolatedModules": true
 	},
-	"include": ["src"],
+	"include": ["src","./src/global.d.ts"],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true,

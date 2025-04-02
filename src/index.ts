@@ -1,5 +1,5 @@
-export type { RenderOptions, Instance } from './preact';
-export { render } from './preact';
+export type { RenderOptions, Instance } from './preact.ts';
+export { render } from './preact.js';
 export type { Props as BoxProps } from './components/Box.js';
 export { default as Box } from './components/Box.js';
 export type { Props as TextProps } from './components/Text.js';
