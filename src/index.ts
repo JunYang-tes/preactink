@@ -9,6 +9,7 @@ export type { Props as StdinProps } from './components/StdinContext.js';
 export type { Props as StdoutProps } from './components/StdoutContext.js';
 export type { Props as StderrProps } from './components/StderrContext.js';
 export type { Props as StaticProps } from './components/Static.js';
+export * from './components/View.js'
 export { default as Static } from './components/Static.js';
 export type { Props as TransformProps } from './components/Transform.js';
 export { default as Transform } from './components/Transform.js';
