@@ -69,7 +69,7 @@ class PreactElement implements ContainerNode {
 			return this._style
 		}
 		const node = this.node;
-		this._style = new Proxy({}, {
+		this._style = new Proxy(node.style, {
 			set(obj, prop, value) {
 				if (typeof value == 'string' && /^\d+px/.test(value)) {
 					const r = Reflect.set(obj, prop, +value.replace('px', ''))
