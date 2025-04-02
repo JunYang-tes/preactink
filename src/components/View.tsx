@@ -1,7 +1,9 @@
-import { VNode, Ref } from "preact"
+import { VNode, Ref, ComponentChildren } from "preact"
 import { Styles } from "../styles.js"
 import { DOMElement } from "../dom.js"
-import { useMemo } from "preact/hooks"
+import { useCallback, useMemo } from "preact/hooks"
+import { forwardRef } from 'preact/compat'
+import { mapRef } from "../utils.js"
 
 export type BoxStyle = Omit<Styles, 'textWrap'>
 const defaultStyle: BoxStyle = {
@@ -15,19 +17,19 @@ const defaultStyle: BoxStyle = {
 
 export type ViewProps = {
 	ref?: Ref<DOMElement>
-	style?: BoxStyle | Array<BoxStyle>
-	children?: VNode
+	style?: BoxStyle | Array<BoxStyle | undefined | null>
+	children?: ComponentChildren
 }
-export function View(props: ViewProps) {
-	const { style, children, ref } = props
+export const View = forwardRef((props: ViewProps, ref: Ref<DOMElement>) => {
+	const { style, children } = props
 	const s = useMemo(() => {
 		if (style == null) {
 			return defaultStyle
 		} else if (Array.isArray(style)) {
-			return style.reverse().reduce((pre, curr) => {
+			return style.reverse().reduce((pre: BoxStyle, curr) => {
 				return {
 					...pre,
-					curr
+					...(curr ?? {})
 				}
 			}, defaultStyle)
 		} else {
@@ -40,10 +42,15 @@ export function View(props: ViewProps) {
 		}
 
 	}, [style])
+
+
 	return <ink-box
 		style={s}
-		ref={ref}
+		ref={mapRef(r => {
+			return r?.node ?? null
+		}, ref)}
 	>
 		{children}
 	</ink-box>
-}
+})
+

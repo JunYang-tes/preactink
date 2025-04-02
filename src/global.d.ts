@@ -1,7 +1,7 @@
-import {VNode,Key,Ref,ComponentChildren} from 'preact'
-import {type Except} from 'type-fest';
-import {type DOMElement} from './dom.js';
-import {type Styles} from './styles.js';
+import { VNode, Key, Ref, ComponentChildren } from 'preact'
+import { type Except } from 'type-fest';
+import { type DOMElement } from './dom.js';
+import { type Styles } from './styles.js';
 
 declare global {
 	namespace preact.JSX {
@@ -18,7 +18,7 @@ declare namespace Ink {
 		internal_static?: boolean;
 		children?: ComponentChildren;
 		key?: Key;
-		ref?: Ref<DOMElement>;
+		ref?: Ref<{ node: DOMElement }>;
 		style?: Except<Styles, 'textWrap'>;
 	};
 
@@ -31,4 +31,4 @@ declare namespace Ink {
 		internal_transform?: (children: string, index: number) => string;
 	};
 }
-export {}
+export { }
