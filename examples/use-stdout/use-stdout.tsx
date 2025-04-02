@@ -1,10 +1,10 @@
-import React from 'react';
+import {useEffect} from 'preact/hooks'
 import {render, Box, Text, useStdout} from '../../src/index.js';
 
 function Example() {
 	const {stdout, write} = useStdout();
 
-	React.useEffect(() => {
+	useEffect(() => {
 		const timer = setInterval(() => {
 			write('Hello from Ink to stdout\n');
 		}, 1000);

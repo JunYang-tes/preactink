@@ -1,9 +1,12 @@
-import {h} from 'preact'
-import { type Except } from 'type-fest';
+import {ComponentChildren,Ref,Key} from 'preact'
 import { type Styles } from '../styles.js';
 import { type DOMElement } from '../dom.js';
 
-export type Props = Except<Styles, 'textWrap'>;
+export type Props = Omit<Styles, 'textWrap'> & {
+	children?:ComponentChildren,
+	ref?:Ref<DOMElement>
+	key?:Key
+};
 
 /**
  * `<Box>` is an essential Ink component to build your layout. It's like `<div style="display: flex">` in the browser.

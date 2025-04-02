@@ -1,5 +1,3 @@
-import {h} from 'preact'
-import process from 'node:process';
 import {throttle} from 'es-toolkit/compat';
 import ansiEscapes from 'ansi-escapes';
 import isInCi from 'is-in-ci';
@@ -14,7 +12,6 @@ import instances from './instances.js';
 import App from './components/App.js';
 import { VNode } from 'preact';
 
-const noop = () => {};
 
 export type Options = {
 	stdout: NodeJS.WriteStream;
@@ -33,7 +30,6 @@ export default class Ink {
 	// Ignore last render after unmounting a tree to prevent empty output before exit
 	private isUnmounted: boolean;
 	private lastOutput: string;
-	private readonly container: FiberRoot;
 	public readonly rootNode: dom.DOMElement;
 	// This variable is used only in debug mode to store full static output
 	// so that it's rerendered every time, not just new static parts, like in non-debug mode

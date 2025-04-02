@@ -1,4 +1,4 @@
-import {render, Box, Text} from '../../src/index';
+import {render, Box, Text} from '../../src/index.js';
 
 function Borders() {
 	return (

@@ -1,0 +1,25 @@
+{
+	"extends": "@sindresorhus/tsconfig",
+	"compilerOptions": {
+		"outDir": "build",
+		"lib": [
+			"DOM",
+			"DOM.Iterable",
+			"ES2023"
+		],
+		"sourceMap": true,
+		"jsx": "react-jsx",
+		"jsxImportSource":"preact",
+		"isolatedModules": true,
+		"noEmitOnError": false
+	},
+	"include": ["borders","counter","jest","justify-content","static","subprocess-output",
+		"suspense","table","use-focus","use-focus-with-id","use-input","use-stderr","use-stdout"
+],
+	"ts-node": {
+		"transpileOnly": true,
+		"files": true,
+		"experimentalResolver": true,
+		"experimentalSpecifierResolution": "node"
+	}
+}

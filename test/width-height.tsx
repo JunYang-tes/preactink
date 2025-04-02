@@ -1,4 +1,3 @@
-import React from 'react';
 import test from 'ava';
 import {Box, Text} from '../src/index.js';
 import {renderToString} from './helpers/render-to-string.js';
