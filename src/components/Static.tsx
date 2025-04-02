@@ -42,7 +42,9 @@ export default function Static<T>(props: Props<T>) {
 	}, [items, index]);
 
 	useLayoutEffect(() => {
-		setIndex(items.length);
+		setTimeout(()=>{
+			setIndex(items.length);
+		})
 	}, [items.length]);
 
 	const children = itemsToRender.map((item, itemIndex) => {

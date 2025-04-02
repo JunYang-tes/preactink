@@ -43,6 +43,20 @@ function isContainer(node: dom.DOMNode): node is dom.DOMElement {
 	return node.nodeName === 'ink-root' || node.nodeName === 'ink-box' || node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text'
 }
 
+function searchStatic(node: dom.DOMNode): DOMElement | undefined {
+	if (node.internal_static) {
+		return node as DOMElement
+	}
+	if (node.nodeName === 'ink-root' || node.nodeName === 'ink-box') {
+		for (const child of node.childNodes) {
+			const staticNode = searchStatic(child)
+			if (staticNode) {
+				return staticNode
+			}
+		}
+	}
+}
+
 
 
 class PreactElement implements ContainerNode {
@@ -51,7 +65,7 @@ class PreactElement implements ContainerNode {
 		return this.node.attributes ?? {}
 	}
 	get style() {
-		if(this._style) {
+		if (this._style) {
 			return this._style
 		}
 		const node = this.node;
@@ -86,12 +100,20 @@ class PreactElement implements ContainerNode {
 		this.node.internal_transform = value
 	}
 	setAttribute(key: string, value: any) {
-		console.log("setAttribute")
 		if (key === 'style') {
 			dom.setStyle(this.node as DOMElement, value)
 		}
 		if (key === 'internal_transform') {
 			this.node.internal_transform = value
+		}
+		if (key === 'internal_static') {
+			this.node.internal_static = value
+			if (value) {
+				PreactElement.root.staticNode = this.node
+				PreactElement.root.isStaticDirty = true
+			} else {
+				PreactElement.root.staticNode = searchStatic(PreactElement.root)
+			}
 		}
 		dom.setAttribute(this.node as DOMElement, key, value)
 		PreactElement.scheduleOutput()
@@ -143,7 +165,7 @@ class PreactElement implements ContainerNode {
 				if (node === otherNode) {
 					return true
 				}
-				for (const child of node.childNodes) {
+				for (const child of (node.childNodes ?? [])) {
 					if (search(child as DOMElement)) {
 						return true
 					}
@@ -185,6 +207,7 @@ class PreactElement implements ContainerNode {
 
 	static scheduleOutput = () => {
 	}
+	static root: DOMElement
 }
 
 
@@ -268,13 +291,22 @@ export function render(node: VNode,
 		() => new Ink(inkOptions),
 	);
 
-	const rootEle = PreactElement.scheduleOutput = throttle(() => {
-		instance.calculateLayout()
-		instance.onRender()
-	}, 35, { trailing: true, leading: true })
+	let flush: NodeJS.Timeout | null;
+	PreactElement.scheduleOutput = () => {
+		if (flush == null) {
+			flush = setTimeout(() => {
+				//console.log("")
+				instance.calculateLayout()
+				instance.onRender()
+				flush = null
+			})
+		}
+	}
+	PreactElement.root = instance.rootNode
 
 	prender(
-		instance.render(node), new PreactElement(instance.rootNode)
+		instance.render(node),
+		new PreactElement(instance.rootNode)
 	)
 	instance.calculateLayout()
 	instance.onRender()
