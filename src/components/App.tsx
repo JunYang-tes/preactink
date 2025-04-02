@@ -216,6 +216,7 @@ export default class App extends Component<Props, State> {
 	};
 
 	handleExit = (error?: Error): void => {
+		cliCursor.show(this.props.stdout);
 		if (error && this.state.debug) {
 			console.error(error)
 		}
