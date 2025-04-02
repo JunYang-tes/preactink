@@ -1,4 +1,3 @@
-import React from 'react';
 import {Box, Text, render, useFocus} from '../../src/index.js';
 
 function Focus() {

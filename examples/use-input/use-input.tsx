@@ -1,10 +1,10 @@
-import React from 'react';
+import {useState} from 'preact/hooks'
 import {render, useInput, useApp, Box, Text} from '../../src/index.js';
 
 function Robot() {
 	const {exit} = useApp();
-	const [x, setX] = React.useState(1);
-	const [y, setY] = React.useState(1);
+	const [x, setX] = useState(1);
+	const [y, setY] = useState(1);
 
 	useInput((input, key) => {
 		if (input === 'q') {

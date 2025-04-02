@@ -1,5 +1,4 @@
-import React from 'react';
-import {render, Box, Text} from '../../src/index.js';
+import {render, Box, Text} from '../../src/index';
 
 function Borders() {
 	return (
