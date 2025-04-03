@@ -9,11 +9,15 @@
 		],
 		"sourceMap": true,
 		"jsx": "react-jsx",
-		"jsxImportSource":"preact",
+		"jsxImportSource": "preact",
 		"isolatedModules": true,
-		"noEmitOnError": false
+		"noEmitOnError": false,
+		"noUncheckedIndexedAccess": false,
 	},
-	"include": ["src","./src/global.d.ts"],
+	"include": [
+		"src",
+		"./src/global.d.ts"
+	],
 	"ts-node": {
 		"transpileOnly": true,
 		"files": true,

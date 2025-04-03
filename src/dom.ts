@@ -1,24 +1,26 @@
 import Yoga, { type Node as YogaNode } from 'yoga-layout';
 import measureText from './measure-text.js';
-import applyStyle, { type Styles } from './styles.js';
+import { type Styles } from './styles.js';
 import wrapText from './wrap-text.js';
 import squashTextNodes from './squash-text-nodes.js';
 import { type OutputTransformer } from './render-node-to-output.js';
 
 
 type InkNode = {
+	bbox?: BBox
 	parentNode: DOMElement | undefined;
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
+	internal_transform?: OutputTransformer;
 	style: Styles;
 };
+
 
 export type TextName = '#text';
 export type ElementNames =
 	| 'ink-root'
 	| 'ink-box'
 	| 'ink-text'
-	| 'ink-virtual-text';
 
 export type NodeNames = ElementNames | TextName;
 
@@ -29,25 +31,39 @@ export type BBox = {
 	height: number
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export type DOMElement = {
-	bbox?: BBox
-	nodeName: ElementNames;
-	attributes: Record<string, DOMNodeAttribute>;
-	childNodes: DOMNode[];
-	internal_transform?: OutputTransformer;
+export type DOMElement = DOMRootElement | DOMBoxElement | DOMTextElement | DOMBoxBorderDecoration
 
-	// Internal properties
-	isStaticDirty?: boolean;
+export type DOMRootElement = {
+	nodeName: 'ink-root',
 	staticNode?: DOMElement;
 	onComputeLayout?: () => void;
 	onRender?: () => void;
 	onImmediateRender?: () => void;
-} & InkNode;
+	attributes: Record<string, DOMNodeAttribute>;
+	childNodes: DOMNode[];
+} & InkNode
+
+export type DOMTextElement = {
+	nodeName: 'ink-text',
+	attributes: Record<string, DOMNodeAttribute>;
+	childNodes: DOMNode[];
+} & InkNode
+
+export type DOMBoxElement = {
+	nodeName: 'ink-box'
+	attributes: Record<string, DOMNodeAttribute>;
+	childNodes: DOMNode[];
+	borderLeftDecorator?: DOMTextElement;
+	borderRightDecorator?: DOMTextElement;
+	borderTopDecorator?: DOMTextElement;
+	borderBottomDecorator?: DOMTextElement;
+} & InkNode
+
 
 export type TextNode = {
 	nodeName: TextName;
 	nodeValue: string;
+	attributes: Record<string, DOMNodeAttribute>;
 } & InkNode;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -69,7 +85,7 @@ export const createNode = (nodeName: ElementNames): DOMElement => {
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
-		yogaNode: nodeName === 'ink-virtual-text' ? undefined : Yoga.Node.create(),
+		yogaNode: Yoga.Node.create(),
 	};
 
 	if (nodeName === 'ink-text') {
@@ -97,7 +113,7 @@ export const appendChildNode = (
 		);
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === 'ink-text') {
 		markNodeAsDirty(node);
 	}
 };
@@ -113,7 +129,7 @@ export const insertBeforeNode = (
 
 	newChildNode.parentNode = node;
 
-	const index = node.childNodes.indexOf(beforeChildNode);
+	const index = node.childNodes.indexOf(beforeChildNode as DOMNode);
 	if (index >= 0) {
 		node.childNodes.splice(index, 0, newChildNode);
 		if (newChildNode.yogaNode) {
@@ -136,7 +152,7 @@ export const insertBeforeNode = (
 		);
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === 'ink-text') {
 		markNodeAsDirty(node);
 	}
 };
@@ -156,7 +172,7 @@ export const removeChildNode = (
 		node.childNodes.splice(index, 1);
 	}
 
-	if (node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text') {
+	if (node.nodeName === 'ink-text') {
 		markNodeAsDirty(node);
 	}
 };
@@ -228,13 +244,13 @@ const markNodeAsDirty = (node?: DOMNode): void => {
 };
 
 // ink-text can be places inside ink-text,let's find the outmost ink-text
-const findOutmostInkText = (node: DOMNode|null): DOMNode | undefined => {
-	if(node == null) {
-		return null
+const findOutmostInkText = (node: DOMNode | undefined | null): DOMNode | undefined => {
+	if (node == null) {
+		return
 	}
 	if (node.nodeName === 'ink-text') {
 		let inkText = node;
-		let parent: DOMNode | null = node.parentNode;
+		let parent: DOMNode | undefined = node.parentNode;
 		while (parent != null && parent.nodeName == 'ink-text') {
 			inkText = parent;
 			parent = parent.parentNode;
