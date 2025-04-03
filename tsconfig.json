@@ -13,6 +13,8 @@
 		"isolatedModules": true,
 		"noEmitOnError": false,
 		"noUncheckedIndexedAccess": false,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false
 	},
 	"include": [
 		"src",

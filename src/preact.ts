@@ -53,6 +53,7 @@ function searchStatic(node: dom.DOMNode): DOMElement | undefined {
 			}
 		}
 	}
+	return
 }
 
 

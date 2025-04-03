@@ -20,7 +20,7 @@ const renderer = (node: DOMElement): Result => {
 
 		let staticOutput;
 
-		if (node.staticNode?.yogaNode) {
+		if (node.nodeName==='ink-root' && node.staticNode?.yogaNode) {
 			staticOutput = new Output({
 				width: node.staticNode.yogaNode.getComputedWidth(),
 				height: node.staticNode.yogaNode.getComputedHeight(),

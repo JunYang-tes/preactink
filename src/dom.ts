@@ -195,6 +195,7 @@ export const createTextNode = (text: string): TextNode => {
 		nodeValue: text,
 		yogaNode: undefined,
 		parentNode: undefined,
+		attributes:{},
 		style: {},
 	};
 
@@ -259,6 +260,7 @@ const findOutmostInkText = (node: DOMNode | undefined | null): DOMNode | undefin
 	} else if (node.nodeName === '#text') {
 		return findOutmostInkText(node.parentNode)
 	}
+	return
 }
 
 export const setTextNodeValue = (node: TextNode, text: string): void => {
