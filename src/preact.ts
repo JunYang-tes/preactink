@@ -1,5 +1,5 @@
 import { render as prender, ContainerNode, VNode, createElement, options as preactOptions } from 'preact'
-import { DOMElement,DOMRootElement, NodeNames } from './dom.js';
+import { DOMElement, DOMRootElement, NodeNames } from './dom.js';
 import * as dom from './dom.js'
 import Ink, { type Options as InkOptions } from './ink.js';
 import instances from './instances.js';
@@ -125,6 +125,7 @@ class PreactElement implements ContainerNode {
 			const childNode = (child as PreactElement).node;
 			dom.removeChildNode(thisNode, childNode as DOMElement);
 			childNode.yogaNode?.freeRecursive();
+			PreactElement.scheduleOutput()
 			return child;
 		}
 		throw new Error('This is not a container');
@@ -132,6 +133,7 @@ class PreactElement implements ContainerNode {
 	appendChild(node: ContainerNode): ContainerNode {
 		const thisNode = this.node
 		if (isContainer(thisNode)) {
+			PreactElement.scheduleOutput()
 			const n = (node as PreactElement).node
 			dom.appendChildNode(
 				thisNode,
@@ -143,8 +145,8 @@ class PreactElement implements ContainerNode {
 	}
 	insertBefore(node: ContainerNode, child: ContainerNode | null): ContainerNode {
 		const thisNode = this.node;
-
 		if (isContainer(thisNode)) {
+			PreactElement.scheduleOutput()
 			const newNode = (node as PreactElement).node;
 			const refNode = child ? (child as PreactElement).node : null;
 			dom.insertBeforeNode(
