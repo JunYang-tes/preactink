@@ -31,7 +31,7 @@ export type BBox = {
 	height: number
 }
 
-export type DOMElement = DOMRootElement | DOMBoxElement | DOMTextElement | DOMBoxBorderDecoration
+export type DOMElement = DOMRootElement | DOMBoxElement | DOMTextElement
 
 export type DOMRootElement = {
 	nodeName: 'ink-root',

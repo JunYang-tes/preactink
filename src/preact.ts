@@ -1,5 +1,5 @@
 import { render as prender, ContainerNode, VNode, createElement, options as preactOptions } from 'preact'
-import { DOMElement, NodeNames } from './dom.js';
+import { DOMElement,DOMRootElement, NodeNames } from './dom.js';
 import * as dom from './dom.js'
 import Ink, { type Options as InkOptions } from './ink.js';
 import instances from './instances.js';
@@ -8,14 +8,12 @@ import { throttle } from 'es-toolkit/compat';
 import applyStyle, { type Styles } from './styles.js';
 
 const TEXT_NODE = 1
-const VIRTUAL_TEXT_NODE = 2
 const BOX_NODE = 3
 const ROOT_NODE = 4;
 const nodeTypes: Record<NodeNames, number> = {
 	'ink-text': TEXT_NODE,
 	'ink-box': BOX_NODE,
 	'ink-root': ROOT_NODE,
-	'ink-virtual-text': VIRTUAL_TEXT_NODE,
 	'#text': TEXT_NODE
 };
 
@@ -40,7 +38,7 @@ const domNode2PreactElement = new WeakMap<dom.DOMNode, PreactElement>();
 }
 
 function isContainer(node: dom.DOMNode): node is dom.DOMElement {
-	return node.nodeName === 'ink-root' || node.nodeName === 'ink-box' || node.nodeName === 'ink-text' || node.nodeName === 'ink-virtual-text'
+	return node.nodeName === 'ink-root' || node.nodeName === 'ink-box' || node.nodeName === 'ink-text'
 }
 
 function searchStatic(node: dom.DOMNode): DOMElement | undefined {
@@ -109,8 +107,7 @@ class PreactElement implements ContainerNode {
 		if (key === 'internal_static') {
 			this.node.internal_static = value
 			if (value) {
-				PreactElement.root.staticNode = this.node
-				PreactElement.root.isStaticDirty = true
+				PreactElement.root.staticNode = (this.node as dom.DOMBoxElement)
 			} else {
 				PreactElement.root.staticNode = searchStatic(PreactElement.root)
 			}
@@ -126,6 +123,7 @@ class PreactElement implements ContainerNode {
 		if (isContainer(thisNode)) {
 			const childNode = (child as PreactElement).node;
 			dom.removeChildNode(thisNode, childNode as DOMElement);
+			childNode.yogaNode?.freeRecursive();
 			return child;
 		}
 		throw new Error('This is not a container');
@@ -207,7 +205,7 @@ class PreactElement implements ContainerNode {
 
 	static scheduleOutput = () => {
 	}
-	static root: DOMElement
+	static root: DOMRootElement
 }
 
 

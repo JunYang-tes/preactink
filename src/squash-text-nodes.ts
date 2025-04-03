@@ -22,8 +22,7 @@ const squashTextNodes = (node: DOMElement): string => {
 			nodeText = childNode.nodeValue;
 		} else {
 			if (
-				childNode.nodeName === 'ink-text' ||
-				childNode.nodeName === 'ink-virtual-text'
+				childNode.nodeName === 'ink-text'
 			) {
 				nodeText = squashTextNodes(childNode);
 			}

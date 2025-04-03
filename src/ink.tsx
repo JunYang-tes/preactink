@@ -30,7 +30,7 @@ export default class Ink {
 	// Ignore last render after unmounting a tree to prevent empty output before exit
 	private isUnmounted: boolean;
 	private lastOutput: string;
-	public readonly rootNode: dom.DOMElement;
+	public readonly rootNode: dom.DOMRootElement;
 	// This variable is used only in debug mode to store full static output
 	// so that it's rerendered every time, not just new static parts, like in non-debug mode
 	private fullStaticOutput: string;
@@ -42,7 +42,7 @@ export default class Ink {
 		autoBind(this);
 
 		this.options = options;
-		this.rootNode = dom.createNode('ink-root');
+		this.rootNode = dom.createNode('ink-root') as dom.DOMRootElement;
 		this.rootNode.onComputeLayout = this.calculateLayout;
 
 		this.rootNode.onRender = options.debug
