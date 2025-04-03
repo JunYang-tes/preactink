@@ -12,15 +12,24 @@ function App() {
 		if (key.upArrow || _input == 'k') {
 			scroll.current?.scrollUp()
 		}
+
+		if (_input == 'n') {
+			scroll.current?.pageDown()
+		}
+		if (_input == 'p') {
+			scroll.current?.pageUp()
+		}
 	});
 	return (
 		<ScrollView
 			ref={scroll}
+			showScrollbar
+			showPercentage
 			height={10}
 			style={{
 				borderStyle: 'round',
-				borderBottom: false,
-				borderTop: false
+				// borderBottom: false,
+				// borderTop: false
 			}}>
 			<View style={{ borderStyle: 'single', flexShrink: 0 }}>
 				<Text>Hello</Text>
