@@ -1,20 +1,24 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import {type Boxes, type BoxStyle} from 'cli-boxes';
-import {type LiteralUnion} from 'type-fest';
-import {type ForegroundColorName} from 'ansi-styles'; // Note: We import directly from `ansi-styles` to avoid a bug in TypeScript.
-import Yoga, {type Node as YogaNode} from 'yoga-layout';
+import { type Boxes, type BoxStyle } from 'cli-boxes';
+import { type LiteralUnion } from 'type-fest';
+import { type ForegroundColorName } from 'ansi-styles'; // Note: We import directly from `ansi-styles` to avoid a bug in TypeScript.
+import Yoga, { type Node as YogaNode } from 'yoga-layout';
 
 export type Styles = {
 	readonly textWrap?:
-		| 'wrap'
-		| 'end'
-		| 'middle'
-		| 'truncate-end'
-		| 'truncate'
-		| 'truncate-middle'
-		| 'truncate-start';
+	| 'wrap'
+	| 'end'
+	| 'middle'
+	| 'truncate-end'
+	| 'truncate'
+	| 'truncate-middle'
+	| 'truncate-start';
 
 	readonly position?: 'absolute' | 'relative';
+	readonly left?: number | `${number}%`;
+	readonly top?: number | `${number}%`;
+	readonly right?: number | `${number}%`;
+	readonly bottom?: number | `${number}%`;
 
 	/**
 	 * Size of the gap between an element's columns.
@@ -148,12 +152,12 @@ export type Styles = {
 	 * See [justify-content](https://css-tricks.com/almanac/properties/j/justify-content/).
 	 */
 	readonly justifyContent?:
-		| 'flex-start'
-		| 'flex-end'
-		| 'space-between'
-		| 'space-around'
-		| 'space-evenly'
-		| 'center';
+	| 'flex-start'
+	| 'flex-end'
+	| 'space-between'
+	| 'space-around'
+	| 'space-evenly'
+	| 'center';
 
 	/**
 	 * Width of the element in spaces.
@@ -311,6 +315,21 @@ const applyPositionStyles = (node: YogaNode, style: Styles): void => {
 				? Yoga.POSITION_TYPE_ABSOLUTE
 				: Yoga.POSITION_TYPE_RELATIVE,
 		);
+		if (style.left != null) {
+			node.setPosition(Yoga.EDGE_LEFT, style.left);
+		}
+
+		if (style.right != null) {
+			node.setPosition(Yoga.EDGE_RIGHT, style.right);
+		}
+
+		if (style.top != null) {
+			node.setPosition(Yoga.EDGE_TOP, style.top);
+		}
+
+		if (style.bottom != null) {
+			node.setPosition(Yoga.EDGE_BOTTOM, style.bottom);
+		}
 	}
 };
 
