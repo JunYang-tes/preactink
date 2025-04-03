@@ -6,6 +6,7 @@ import measureElement from '../measure-element.js';
 import useInput from '../hooks/use-input.js';
 import { forwardRef, Ref } from 'preact/compat';
 import Box from './Box.js';
+import { mergeStyle } from '../utils.js';
 
 interface ScrollAreaState {
 	innerHeight: number;
@@ -86,7 +87,9 @@ export type ScrollViewInstance = {
 	pageDown: () => void
 }
 
-export const ScrollView = forwardRef(function ScrollView({ height, children, style, showPercentage, showScrollbar }: ScrollViewProps, ref: Ref<ScrollViewInstance>) {
+export const ScrollView = forwardRef(function ScrollView({
+	height, children, style,
+	showPercentage, showScrollbar }: ScrollViewProps, ref: Ref<ScrollViewInstance>) {
 	const [state, dispatch] = useReducer(reducer, {
 		height: height ?? 10,
 		scrollTop: 0,
@@ -153,24 +156,24 @@ export const ScrollView = forwardRef(function ScrollView({ height, children, sty
 
 	return (
 		<View
-			style={[
-				//...(Array.isArray(style) ? style : [style]),
+			style={
 				{
 					height: height,
 					flexDirection: 'column',
 					flexGrow: 1,
 					overflow: 'visible'
-				}]}>
+				}}
+		>
 			<View
 				ref={scrollContainerRef}
-				style={[
-					...(Array.isArray(style) ? style : [style]),
+				style={mergeStyle([
+					style,
 					{
 						height: height,
 						flexDirection: 'column',
 						flexGrow: 1,
 						overflow: 'hidden'
-					}]}>
+					}])}>
 				<View ref={innerRef}
 					style={{ flexGrow: 1, flexShrink: 0, flexDirection: 'column', marginTop: -state.scrollTop }}
 				>
