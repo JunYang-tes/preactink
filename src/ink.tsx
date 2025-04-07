@@ -1,4 +1,4 @@
-import {throttle} from 'es-toolkit/compat';
+import { throttle } from 'es-toolkit/compat';
 import ansiEscapes from 'ansi-escapes';
 import isInCi from 'is-in-ci';
 import autoBind from 'auto-bind';
@@ -7,7 +7,7 @@ import patchConsole from 'patch-console';
 import Yoga from 'yoga-layout';
 import render from './renderer.js';
 import * as dom from './dom.js';
-import logUpdate, {type LogUpdate} from './log-update.js';
+import logUpdate, { type LogUpdate } from './log-update.js';
 import instances from './instances.js';
 import App from './components/App.js';
 import { VNode } from 'preact';
@@ -20,6 +20,7 @@ export type Options = {
 	debug: boolean;
 	exitOnCtrlC: boolean;
 	patchConsole: boolean;
+	alternativeScreen: boolean;
 	waitUntilExit?: () => Promise<void>;
 };
 
@@ -48,18 +49,18 @@ export default class Ink {
 		this.rootNode.onRender = options.debug
 			? this.onRender
 			: throttle(this.onRender, 32, {
-					leading: true,
-					trailing: true,
-				});
+				leading: true,
+				trailing: true,
+			});
 
 		this.rootNode.onImmediateRender = this.onRender;
 		this.log = logUpdate.create(options.stdout);
 		this.throttledLog = options.debug
 			? this.log
 			: (throttle(this.log, undefined, {
-					leading: true,
-					trailing: true,
-				}) as unknown as LogUpdate);
+				leading: true,
+				trailing: true,
+			}) as unknown as LogUpdate);
 
 		// Ignore last render after unmounting a tree to prevent empty output before exit
 		this.isUnmounted = false;
@@ -74,7 +75,7 @@ export default class Ink {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 
 		// Unmount when process exits
-		this.unsubscribeExit = signalExit(this.unmount, {alwaysLast: false});
+		this.unsubscribeExit = signalExit(this.unmount, { alwaysLast: false });
 
 
 		if (options.patchConsole) {
@@ -95,9 +96,9 @@ export default class Ink {
 		this.onRender();
 	};
 
-	resolveExitPromise: () => void = () => {};
-	rejectExitPromise: (reason?: Error) => void = () => {};
-	unsubscribeExit: () => void = () => {};
+	resolveExitPromise: () => void = () => { };
+	rejectExitPromise: (reason?: Error) => void = () => { };
+	unsubscribeExit: () => void = () => { };
 
 	calculateLayout = () => {
 		// The 'columns' property can be undefined or 0 when not using a TTY.
@@ -113,12 +114,9 @@ export default class Ink {
 		);
 	};
 
-	onRender: () => void = () => {
-		if (this.isUnmounted) {
-			return;
-		}
+	flushNonAlternativeScreen = () => {
 
-		const {output, outputHeight, staticOutput} = render(this.rootNode);
+		const { output, outputHeight, staticOutput } = render(this.rootNode);
 
 		// If <Static> output isn't empty, it means new children have been added to it
 		const hasStaticOutput = staticOutput && staticOutput !== '\n';
@@ -165,9 +163,34 @@ export default class Ink {
 		}
 
 		this.lastOutput = output;
+	}
+	flushAlternativeScreen = () => {
+		const { output, outputHeight, staticOutput } = render(this.rootNode);
+		const hasStaticOutput = staticOutput && staticOutput !== '\n';
+		if (hasStaticOutput) {
+			this.options.stdout.write(ansiEscapes.clearTerminal + staticOutput + output);
+		} else {
+			this.options.stdout.write(ansiEscapes.clearTerminal + output);
+		}
+		this.lastOutput = output
+	}
+
+	onRender: () => void = () => {
+		if (this.isUnmounted) {
+			return;
+		}
+		if (this.options.alternativeScreen) {
+			this.flushAlternativeScreen()
+		} else {
+			this.flushNonAlternativeScreen()
+		}
+
 	};
 
 	render(node: VNode): VNode {
+		if (this.options.alternativeScreen) {
+			this.options.stdout.write(ansiEscapes.enterAlternativeScreen)
+		}
 		return (
 			<App
 				stdin={this.options.stdin}
@@ -254,6 +277,7 @@ export default class Ink {
 		this.isUnmounted = true;
 
 		instances.delete(this.options.stdout);
+		this.options.stdout.write(ansiEscapes.exitAlternativeScreen)
 
 		if (error instanceof Error) {
 			this.rejectExitPromise(error);

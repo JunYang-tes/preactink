@@ -242,6 +242,11 @@ export type RenderOptions = {
 	 * @default true
 	 */
 	exitOnCtrlC?: boolean;
+	/**
+	 * If true, Ink will use the alternative screen buffer to render the app.
+	 * @default false
+	 */
+	alternativeScreen?: boolean
 
 	/**
 	 * Patch console methods to ensure console output doesn't mix with Ink output.
@@ -284,6 +289,7 @@ export function render(node: VNode,
 		debug: false,
 		exitOnCtrlC: true,
 		patchConsole: true,
+		alternativeScreen: false,
 		...getOptions(options),
 	};
 

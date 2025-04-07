@@ -45,5 +45,7 @@ function App() {
 	);
 }
 
-render(<App />);
+render(<App />,{
+	alternativeScreen: true
+});
 
