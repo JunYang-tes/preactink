@@ -125,7 +125,7 @@ export const ScrollView = forwardRef(function ScrollView({
 			type: 'SET_INNER_HEIGHT',
 			innerHeight: dimensions.height,
 		});
-	}, []);
+	}, [children]);
 
 	useImperativeHandle(ref, () => {
 		return {
