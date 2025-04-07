@@ -1,7 +1,3 @@
-[![](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
-
----
-
 <div align="center">
 	<br>
 	<br>
@@ -11,43 +7,21 @@
 	<br>
 </div>
 
-> React for CLIs. Build and test your CLI output using components.
+>**This is a fork of ink which works with preact.**
 
-[![Build Status](https://github.com/vadimdemedes/ink/workflows/test/badge.svg)](https://github.com/vadimdemedes/ink/actions)
-[![npm](https://img.shields.io/npm/dm/ink?logo=npm)](https://npmjs.com/package/ink)
-
-Ink provides the same component-based UI building experience that React offers in the browser, but for command-line apps.
-It uses [Yoga](https://github.com/facebook/yoga) to build Flexbox layouts in the terminal, so most CSS-like props are available in Ink as well.
-If you are already familiar with React, you already know Ink.
-
-Since Ink is a React renderer, it means that all features of React are supported.
-Head over to [React](https://reactjs.org) website for documentation on how to use it.
-Only Ink's methods will be documented in this readme.
-
-**Note:** This is documentation for Ink 4 and 5. If you're looking for docs on Ink 3, check out [this release](https://github.com/vadimdemedes/ink/tree/v3.2.0).
-
----
-
-<div align="center">
-	<p>
-		<p>
-			<sup>
-				<a href="https://opencollective.com/vadimdemedes">My open source work is supported by the community ❤️</a>
-			</sup>
-		</p>
-	</p>
-</div>
-
-## Install
+## Run the example
 
 ```sh
-npm install ink react
+git clone https://github.com/JunYang-tes/ink.git
+cd ink
+bun install
+bun run examples/counter/counter.tsx
 ```
 
 ## Usage
 
 ```jsx
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'preact/hooks';
 import {render, Text} from 'ink';
 
 const Counter = () => {
@@ -70,55 +44,6 @@ render(<Counter />);
 ```
 
 <img src="media/demo.svg" width="600">
-
-You can also check it out live on [repl.it sandbox](https://ink-counter-demo.vadimdemedes.repl.run/).
-Feel free to play around with the code and fork this repl at [https://repl.it/@vadimdemedes/ink-counter-demo](https://repl.it/@vadimdemedes/ink-counter-demo).
-
-## Who's Using Ink?
-
-- [Claude Code](https://github.com/anthropics/claude-code) - An agentic coding tool made by Anthropic.
-- [GitHub Copilot for CLI](https://githubnext.com/projects/copilot-cli) - Just say what you want the shell to do.
-- [Cloudflare's Wrangler](https://github.com/cloudflare/wrangler2) - The CLI for Cloudflare Workers.
-- [Linear](https://linear.app) - Linear built an internal CLI for managing deployments, configs and other housekeeping tasks.
-- [Gatsby](https://www.gatsbyjs.org) - Gatsby is a modern web framework for blazing fast websites.
-- [tap](https://node-tap.org) - A Test-Anything-Protocol library for JavaScript.
-- [Terraform CDK](https://github.com/hashicorp/terraform-cdk) - CDK (Cloud Development Kit) for HashiCorp Terraform.
-- [Specify CLI](https://specifyapp.com) - Automate the distribution of your design tokens.
-- [Twilio's SIGNAL](https://github.com/twilio-labs/plugin-signal2020) - CLI for Twilio's SIGNAL conference. [Blog post](https://www.twilio.com/blog/building-conference-cli-in-react).
-- [Typewriter](https://github.com/segmentio/typewriter) - Generates strongly-typed [Segment](https://segment.com) analytics clients from arbitrary JSON Schema.
-- [Prisma](https://www.prisma.io) - The unified data layer for modern applications.
-- [Blitz](https://blitzjs.com) - The Fullstack React Framework.
-- [New York Times](https://github.com/nytimes/kyt) - NYT uses Ink `kyt` - a toolkit that encapsulates and manages the configuration for web apps.
-- [tink](https://github.com/npm/tink) - Next-generation runtime and package manager.
-- [Inkle](https://github.com/jrr/inkle) - Wordle game.
-- [loki](https://github.com/oblador/loki) - Visual regression testing for Storybook.
-- [Bit](https://github.com/teambit/bit) - Build, distribute and collaborate on components.
-- [Remirror](https://github.com/remirror/remirror) - Your friendly, world-class editor toolkit.
-- [Prime](https://github.com/birkir/prime) - Open source GraphQL CMS.
-- [emoj](https://github.com/sindresorhus/emoj) - Find relevant emojis.
-- [emma](https://github.com/maticzav/emma-cli) - Find and install npm packages.
-- [npm-check-extras](https://github.com/akgondber/npm-check-extras) - Check for outdated and unused dependencies, and run update/delete action over selected ones.
-- [swiff](https://github.com/simple-integrated-marketing/swiff) - Multi-environment command line tools for time-saving web developers.
-- [share](https://github.com/marionebl/share-cli) - Quickly share files.
-- [Kubelive](https://github.com/ameerthehacker/kubelive) - CLI for Kubernetes to provide live data about the cluster and its resources.
-- [changelog-view](https://github.com/jdeniau/changelog-view) - View changelogs.
-- [cfpush](https://github.com/mamachanko/cfpush) - An interactive Cloud Foundry tutorial.
-- [startd](https://github.com/mgrip/startd) - Turn your React component into a web app.
-- [wiki-cli](https://github.com/hexrcs/wiki-cli) - Search Wikipedia and read summaries.
-- [garson](https://github.com/goliney/garson) - Build interactive config-based command-line interfaces.
-- [git-contrib-calendar](https://github.com/giannisp/git-contrib-calendar) - Display a contributions calendar for any git repository.
-- [gitgud](https://github.com/GitGud-org/GitGud) - An interactive command-line GUI for Git.
-- [Autarky](https://github.com/pranshuchittora/autarky) - Find and delete old `node_modules` directories in order to free up disk space.
-- [fast-cli](https://github.com/sindresorhus/fast-cli) - Test your download and upload speed.
-- [tasuku](https://github.com/privatenumber/tasuku) - Minimal task runner.
-- [mnswpr](https://github.com/mordv/mnswpr) - Minesweeper game.
-- [lrn](https://github.com/krychu/lrn) - Learning by repetition.
-- [turdle](https://github.com/mynameisankit/turdle) - Wordle game.
-- [Shopify CLI](https://github.com/Shopify/cli) - Build apps, themes, and storefronts for Shopify.
-- [ToDesktop CLI](https://www.todesktop.com/electron) - An all-in-one platform for building Electron apps.
-- [Walle](https://github.com/Pobepto/walle) - Full-featured crypto wallet for EVM networks.
-- [Sudoku](https://github.com/mrozio13pl/sudoku-in-terminal) - Sudoku game.
-- [Sea Trader](https://github.com/zyishai/sea-trader) - Taipan! inspired trading simulator game.
 
 ## Contents
 
@@ -146,18 +71,6 @@ Feel free to play around with the code and fork this repl at [https://repl.it/@v
 - [Examples](#examples)
 
 ## Getting Started
-
-Use [create-ink-app](https://github.com/vadimdemedes/create-ink-app) to quickly scaffold a new Ink-based CLI.
-
-```sh
-npx create-ink-app my-ink-cli
-```
-
-Alternatively, create a TypeScript project:
-
-```sh
-npx create-ink-app --typescript my-ink-cli
-```
 
 <details><summary>Manual JavaScript setup</summary>
 <p>
