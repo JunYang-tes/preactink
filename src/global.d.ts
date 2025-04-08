@@ -16,6 +16,7 @@ declare global {
 declare namespace Ink {
 	type Box = {
 		internal_static?: boolean;
+		onResize?: (e: { width: number, height: number }) => void;
 		children?: ComponentChildren;
 		key?: Key;
 		ref?: Ref<{ node: DOMElement }>;

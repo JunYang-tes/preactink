@@ -60,6 +60,21 @@ function searchStatic(node: dom.DOMNode): DOMElement | undefined {
 
 class PreactElement implements ContainerNode {
 	_style: Styles | null = null
+	addEventListener(key: string, callback: Function) {
+		// @ts-ignore
+		this.node.events['on' + key] = (e: object) => {
+			callback.call(
+				this,
+				{
+					type: key,
+					...e
+				})
+		}
+	}
+	removeEventListener(key: string) {
+		// @ts-ignore
+		this.node.events['on' + key] = undefined
+	}
 	get attributes() {
 		return this.node.attributes ?? {}
 	}

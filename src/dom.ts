@@ -12,6 +12,9 @@ type InkNode = {
 	yogaNode?: YogaNode;
 	internal_static?: boolean;
 	internal_transform?: OutputTransformer;
+	events: {
+		onResize?: (event: { width: number, height: number }) => void
+	}
 	style: Styles;
 };
 
@@ -82,6 +85,7 @@ export const createNode = (nodeName: ElementNames): DOMElement => {
 	const node: DOMElement = {
 		nodeName,
 		style: {},
+		events: {},
 		attributes: {},
 		childNodes: [],
 		parentNode: undefined,
@@ -195,7 +199,8 @@ export const createTextNode = (text: string): TextNode => {
 		nodeValue: text,
 		yogaNode: undefined,
 		parentNode: undefined,
-		attributes:{},
+		attributes: {},
+		events: {},
 		style: {},
 	};
 

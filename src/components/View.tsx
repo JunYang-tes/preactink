@@ -18,10 +18,11 @@ const defaultStyle: BoxStyle = {
 export type ViewProps = {
 	ref?: Ref<DOMElement>
 	style?: BoxStyle | Array<BoxStyle | undefined | null>
+	onResize?: (e: { width: number, height: number }) => void
 	children?: ComponentChildren
 }
 export const View = forwardRef((props: ViewProps, ref: Ref<DOMElement>) => {
-	const { style, children } = props
+	const { style, children, ...rest } = props
 	const s = useMemo(() => {
 		if (style == null) {
 			return defaultStyle
@@ -45,6 +46,7 @@ export const View = forwardRef((props: ViewProps, ref: Ref<DOMElement>) => {
 
 
 	return <ink-box
+		{...rest}
 		style={s}
 		ref={mapRef(r => {
 			return r?.node ?? null
