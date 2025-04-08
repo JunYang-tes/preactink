@@ -1,9 +1,9 @@
 {
-	"name": "ink",
-	"version": "5.2.0",
-	"description": "React for CLI",
+	"name": "preactink",
+	"version": "0.0.1",
+	"description": "An ink fork, Preact for CLI",
 	"license": "MIT",
-	"repository": "vadimdemedes/ink",
+	"repository": "https://github.com/JunYang-tes/preactink",
 	"author": {
 		"name": "Vadim Demedes",
 		"email": "vadimdemedes@hey.com",
