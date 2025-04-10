@@ -1,4 +1,4 @@
-import React, {type ComponentChildren} from 'preact';
+import React, { VNode, type ComponentChildren } from 'preact';
 
 export type Props = {
 	/**
@@ -15,14 +15,14 @@ export type Props = {
  * These use cases can't accept React nodes as input, they are expecting a string.
  * That's what <Transform> component does, it gives you an output string of its child components and lets you transform it in any way.
  */
-export default function Transform({children, transform}: Props) {
+export default function Transform({ children, transform }: Props): VNode|null {
 	if (children === undefined || children === null) {
 		return null;
 	}
 
 	return (
 		<ink-text
-			style={{flexGrow: 0, flexShrink: 1, flexDirection: 'row'}}
+			style={{ flexGrow: 0, flexShrink: 1, flexDirection: 'row' }}
 			internal_transform={transform}
 		>
 			{children}
