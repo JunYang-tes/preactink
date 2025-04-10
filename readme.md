@@ -69,6 +69,54 @@ Then run `bun run index.tsx` to see the output.
 
 Update tsconfig.json to include `jsxImportSource: 'preact'` to get error out.
 
+### Use node
+
+1. Create a node project
+
+```
+mkdir demo
+npm init
+npm add -D typescript
+npm add preactink
+```
+
+1. Update package.json, set type to module
+
+```json
+{
+  "type": "module"
+}
+```
+
+
+1. Save the following to tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "jsx": "react-jsx",
+    "jsxImportSource": "preact",
+    "target": "ESNext",
+    "module": "node16",
+    "moduleResolution": "nodenext",
+    "moduleDetection": "force",
+  }
+}
+```
+
+1. Save to following to index.tsx
+
+```tsx
+import { render, Text } from 'preactink'
+render(<Text>Hello, World</Text>)
+```
+
+1. run `npx tsc` to build it
+
+1. run `node ./dist/index.js`
+
+
 
 Preactink uses [Yoga](https://github.com/facebook/yoga) - a Flexbox layout engine to build great user interfaces for your CLIs using familiar CSS-like props you've used when building apps for the browser.
 It's important to remember that each element is a Flexbox container.
