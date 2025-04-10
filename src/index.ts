@@ -26,5 +26,6 @@ export { default as useFocus } from './hooks/use-focus.js';
 export { default as useFocusManager } from './hooks/use-focus-manager.js';
 export { default as measureElement } from './measure-element.js';
 export type { DOMElement } from './dom.js';
+export { default as parseKeypress} from './parse-keypress.js';
 export { default as instances } from './instances.js';
 export * from './components/ScrollView.js'
