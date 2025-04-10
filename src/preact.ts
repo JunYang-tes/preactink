@@ -330,8 +330,7 @@ export function render(node: VNode,
 		instance.render(node),
 		new PreactElement(instance.rootNode)
 	)
-	instance.calculateLayout()
-	instance.onRender()
+	PreactElement.scheduleOutput()
 
 	return {
 		rerender: instance.render,
