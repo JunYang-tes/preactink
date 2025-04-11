@@ -6,8 +6,9 @@ import codeExcerpt, { type CodeExcerpt } from 'code-excerpt';
 import Box from './Box.js';
 import Text from './Text.js';
 import { ScrollView, ScrollViewInstance } from './ScrollView.js';
-import { useCallback, useRef } from 'preact/hooks';
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import useInput from '../hooks/use-input.js';
+import useStdout from '../hooks/use-stdout.js';
 
 // Error's source file is reported as file:///home/user/file.js
 // This function removes the file://[cwd] part
@@ -26,7 +27,9 @@ type Props = {
 };
 
 export default function ErrorOverview({ scroll, error }: Props) {
+	const { stdout } = useStdout()
 	const scrollRef = useRef<ScrollViewInstance>(null)
+	const [height, setHeight] = useState(stdout.rows)
 	useInput(useCallback((data, key) => {
 		if (key.pageDown || (data == 'd' && key.ctrl)) {
 			scrollRef.current?.pageDown()
@@ -34,9 +37,18 @@ export default function ErrorOverview({ scroll, error }: Props) {
 			scrollRef.current?.pageUp()
 		}
 	}, []), { isActive: scroll })
+	useEffect(()=>{
+		const resize = ()=>{
+			setHeight(stdout.rows)
+		}
+		stdout.on('resize', resize)
+		return ()=>{
+			stdout.off('resize', resize)
+		}
+	},[stdout])
 
 	if (scroll) {
-		return <ScrollView ref={scrollRef}>
+		return <ScrollView height={height} ref={scrollRef}>
 			<ErrorInfo error={error} />
 		</ScrollView>
 	}
