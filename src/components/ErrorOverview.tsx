@@ -1,10 +1,13 @@
-import {h} from 'preact'
+import { h } from 'preact'
 import * as fs from 'node:fs';
-import {cwd} from 'node:process';
+import { cwd } from 'node:process';
 import StackUtils from 'stack-utils';
-import codeExcerpt, {type CodeExcerpt} from 'code-excerpt';
+import codeExcerpt, { type CodeExcerpt } from 'code-excerpt';
 import Box from './Box.js';
 import Text from './Text.js';
+import { ScrollView, ScrollViewInstance } from './ScrollView.js';
+import { useCallback, useRef } from 'preact/hooks';
+import useInput from '../hooks/use-input.js';
 
 // Error's source file is reported as file:///home/user/file.js
 // This function removes the file://[cwd] part
@@ -18,10 +21,29 @@ const stackUtils = new StackUtils({
 });
 
 type Props = {
+	readonly scroll?: boolean
 	readonly error: Error;
 };
 
-export default function ErrorOverview({error}: Props) {
+export default function ErrorOverview({ scroll, error }: Props) {
+	const scrollRef = useRef<ScrollViewInstance>(null)
+	useInput(useCallback((data, key) => {
+		if (key.pageDown || (data == 'd' && key.ctrl)) {
+			scrollRef.current?.pageDown()
+		} else if (key.pageUp || (data == 'u' && key.ctrl)) {
+			scrollRef.current?.pageUp()
+		}
+	}, []), { isActive: scroll })
+
+	if (scroll) {
+		return <ScrollView ref={scrollRef}>
+			<ErrorInfo error={error} />
+		</ScrollView>
+	}
+	return <ErrorInfo error={error} />
+}
+
+function ErrorInfo({ error }: Props) {
 	const stack = error.stack ? error.stack.split('\n').slice(1) : undefined;
 	const origin = stack ? stackUtils.parseLine(stack[0]!) : undefined;
 	const filePath = cleanupPath(origin?.file);
@@ -33,7 +55,7 @@ export default function ErrorOverview({error}: Props) {
 		excerpt = codeExcerpt(sourceCode, origin.line);
 
 		if (excerpt) {
-			for (const {line} of excerpt) {
+			for (const { line } of excerpt) {
 				lineWidth = Math.max(lineWidth, String(line).length);
 			}
 		}
@@ -60,7 +82,7 @@ export default function ErrorOverview({error}: Props) {
 
 			{origin && excerpt && (
 				<Box marginTop={1} flexDirection="column">
-					{excerpt.map(({line, value}) => (
+					{excerpt.map(({ line, value }) => (
 						<Box key={line}>
 							<Box width={lineWidth + 1}>
 								<Text

@@ -198,6 +198,7 @@ export default class Ink {
 				stderr={this.options.stderr}
 				writeToStdout={this.writeToStdout}
 				writeToStderr={this.writeToStderr}
+				alternativeScreen={this.options.alternativeScreen}
 				exitOnCtrlC={this.options.exitOnCtrlC}
 				onExit={this.unmount}
 			>

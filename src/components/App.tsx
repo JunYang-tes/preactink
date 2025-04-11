@@ -8,6 +8,7 @@ import StdoutContext from './StdoutContext.js';
 import StderrContext from './StderrContext.js';
 import FocusContext from './FocusContext.js';
 import ErrorOverview from './ErrorOverview.js';
+import {ScrollView} from './ScrollView.js';
 
 const tab = '\t';
 const shiftTab = '\u001B[Z';
@@ -21,6 +22,7 @@ type Props = {
 	readonly writeToStdout: (data: string) => void;
 	readonly writeToStderr: (data: string) => void;
 	readonly exitOnCtrlC: boolean;
+	readonly alternativeScreen?: boolean
 	readonly onExit: (error?: Error) => void;
 };
 
@@ -115,7 +117,7 @@ export default class App extends Component<Props, State> {
 								}}
 							>
 								{this.state.error ? (
-									<ErrorOverview error={this.state.error as Error} />
+									<ErrorOverview scroll={this.props.alternativeScreen} error={this.state.error as Error} />
 								) : (
 									this.props.children
 								)}
@@ -141,7 +143,7 @@ export default class App extends Component<Props, State> {
 	}
 
 	override componentDidCatch(error: Error) {
-		this.handleExit(error);
+		this.setState({ error });
 	}
 
 	handleSetRawMode = (isEnabled: boolean): void => {
