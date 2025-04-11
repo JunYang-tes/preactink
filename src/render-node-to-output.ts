@@ -69,7 +69,7 @@ const renderNodeToOutput = (
 		}
 		if ((node.bbox?.height !== bbox.height || node.bbox?.width !== bbox.width)
 		) {
-			node.events?.onResize?.({ width: bbox.width, height: bbox.height })
+			node.events?.onResize?.({ width: bbox.width, height: bbox.height, node: node })
 		}
 
 		node.bbox = bbox

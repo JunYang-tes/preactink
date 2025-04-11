@@ -99,33 +99,33 @@ export const ScrollView = forwardRef(function ScrollView({
 	const scrollContainerRef = useRef<DOMElement>(null);
 	const innerRef = useRef<DOMElement>(null);
 
-	useEffect(() => {
-		if (scrollContainerRef.current) {
-			const node = scrollContainerRef.current
-			const dimensions = measureElement(node);
-			let borderHeight = node.style.borderStyle ? 2 : 0
-			// if (node.style.borderTop === false) {
-			// 	borderHeight -= 1
-			// }
-			// if (node.style.borderBottom === false) {
-			// 	borderHeight -= 1
-			// }
-			dispatch({ type: 'SET_HEIGHT', height: dimensions.height - borderHeight });
-		} else if (height != null) {
-			dispatch({ type: 'SET_HEIGHT', height });
-		}
-	}, [height]);
-
-	useEffect(() => {
-		if (!innerRef.current) return;
-
-		const dimensions = measureElement(innerRef.current);
-
-		dispatch({
-			type: 'SET_INNER_HEIGHT',
-			innerHeight: dimensions.height,
-		});
-	}, [children]);
+	// useEffect(() => {
+	// 	if (scrollContainerRef.current) {
+	// 		const node = scrollContainerRef.current
+	// 		const dimensions = measureElement(node);
+	// 		let borderHeight = node.style.borderStyle ? 2 : 0
+	// 		// if (node.style.borderTop === false) {
+	// 		// 	borderHeight -= 1
+	// 		// }
+	// 		// if (node.style.borderBottom === false) {
+	// 		// 	borderHeight -= 1
+	// 		// }
+	// 		dispatch({ type: 'SET_HEIGHT', height: dimensions.height - borderHeight });
+	// 	} else if (height != null) {
+	// 		dispatch({ type: 'SET_HEIGHT', height });
+	// 	}
+	// }, [height]);
+	//
+	// useEffect(() => {
+	// 	if (!innerRef.current) return;
+	//
+	// 	const dimensions = measureElement(innerRef.current);
+	//
+	// 	dispatch({
+	// 		type: 'SET_INNER_HEIGHT',
+	// 		innerHeight: dimensions.height,
+	// 	});
+	// }, [children]);
 
 	useImperativeHandle(ref, () => {
 		return {
@@ -166,6 +166,19 @@ export const ScrollView = forwardRef(function ScrollView({
 		>
 			<View
 				ref={scrollContainerRef}
+				onResize={(e) => {
+					setTimeout(() => {
+						const { node } = e
+						let borderHeight = node.style.borderStyle ? 2 : 0
+						// if (node.style.borderTop === false) {
+						// 	borderHeight -= 1
+						// }
+						// if (node.style.borderBottom === false) {
+						// 	borderHeight -= 1
+						// }
+						dispatch({ type: 'SET_HEIGHT', height: e.height - borderHeight });
+					})
+				}}
 				style={mergeStyle([
 					style,
 					{
@@ -174,7 +187,13 @@ export const ScrollView = forwardRef(function ScrollView({
 						flexGrow: 1,
 						overflow: 'hidden'
 					}])}>
-				<View ref={innerRef}
+				<View
+					ref={innerRef}
+					onResize={(e) => {
+						setTimeout(() => {
+							dispatch({ type: 'SET_INNER_HEIGHT', innerHeight: e.height })
+						})
+					}}
 					style={{ flexGrow: 1, flexShrink: 0, flexDirection: 'column', marginTop: -state.scrollTop }}
 				>
 					{children}

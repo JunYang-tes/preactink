@@ -18,7 +18,7 @@ const defaultStyle: BoxStyle = {
 export type ViewProps = {
 	ref?: Ref<DOMElement>
 	style?: BoxStyle | Array<BoxStyle | undefined | null>
-	onResize?: (e: { width: number, height: number }) => void
+	onResize?: (e: { width: number, height: number, node: DOMElement }) => void
 	children?: ComponentChildren
 }
 export const View = forwardRef((props: ViewProps, ref: Ref<DOMElement>) => {

@@ -13,7 +13,7 @@ type InkNode = {
 	internal_static?: boolean;
 	internal_transform?: OutputTransformer;
 	events: {
-		onResize?: (event: { width: number, height: number }) => void
+		onResize?: (event: { width: number, height: number, node: DOMElement }) => void
 	}
 	style: Styles;
 };
