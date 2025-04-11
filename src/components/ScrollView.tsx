@@ -181,7 +181,7 @@ export const ScrollView = forwardRef(function ScrollView({
 				</View>
 			</View>
 			{ }
-			{showScrollbar && <Scrollbar percatenge={state.scrollTop / (state.innerHeight - state.height + 1) * 100} />}
+			{showScrollbar && (state.innerHeight > state.height) && <Scrollbar percatenge={state.scrollTop / (state.innerHeight - state.height + 1) * 100} />}
 			{showPercentage && (state.innerHeight > state.height) && <Percentage
 				percatenge={state.scrollTop / (state.innerHeight - state.height) * 100}
 			/>}
