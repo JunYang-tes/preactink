@@ -12,6 +12,9 @@ function App() {
 		if (key.upArrow || _input == 'k') {
 			scroll.current?.scrollUp()
 		}
+		if(_input == 'e') {
+			scroll.current?.scrollToEnd()
+		}
 
 		if (_input == 'n') {
 			scroll.current?.pageDown()

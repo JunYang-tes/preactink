@@ -19,6 +19,7 @@ type ScrollAreaAction =
 	| { type: 'SET_HEIGHT'; height: number }
 	| { type: 'SCROLL_DOWN' }
 	| { type: 'SCROLL_UP' }
+	| { type: 'SCROLL_TO', scrollTop: number }
 	| { type: 'PAGE_DOWN' }
 	| { type: 'PAGE_UP' }
 
@@ -66,6 +67,11 @@ const reducer = (state: ScrollAreaState, action: ScrollAreaAction) => {
 						state.scrollTop + state.height,
 					),
 			};
+		case 'SCROLL_TO':
+			return {
+				...state,
+				scrollTop: Math.min(Math.max(0, action.scrollTop), state.innerHeight - state.height),
+			};
 
 		default:
 			return state;
@@ -82,7 +88,9 @@ export type ScrollViewProps = {
 
 export type ScrollViewInstance = {
 	scrollDown: () => void,
-	scrollUp: () => void
+	scrollUp: () => void,
+	scrollToTop: () => void,
+	scrollToEnd: () => void
 	pageUp: () => void,
 	pageDown: () => void
 }
@@ -148,6 +156,18 @@ export const ScrollView = forwardRef(function ScrollView({
 				dispatch({
 					type: 'PAGE_DOWN',
 				});
+			},
+			scrollToTop: () => {
+				dispatch({
+					type: 'SCROLL_TO',
+					scrollTop: 0
+				})
+			},
+			scrollToEnd: () => {
+				dispatch({
+					type: 'SCROLL_TO',
+					scrollTop: Number.POSITIVE_INFINITY
+				})
 			}
 		}
 	}, [dispatch])
