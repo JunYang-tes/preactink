@@ -14,22 +14,14 @@ export function mapRef<R, T>(f: (r: T | null) => R | null, ref?: Ref<R>): Ref<T>
 	}
 }
 
-type NestedableStyle = Styles | Array<NestedableStyle|null|undefined>
+export type NestedableStyle<T = Styles> = T | Array<NestedableStyle | null | undefined>
 
-export function mergeStyle(style: NestedableStyle): Styles {
-	if (Array.isArray(style)) {
-		return style.reverse().reduce((pre: Styles, curr) => {
-			if (Array.isArray(curr)) {
-				return {
-					...pre,
-					...mergeStyle(curr)
-				}
-			}
-			return {
-				...pre,
-				...(curr ?? {})
-			}
+export function mergeStyle<T = Styles>(style: NestedableStyle): Styles {
+	const s = Array.isArray(style) ? style : [style]
+	return ((s as any).flat(Infinity) as Array<Styles | null | undefined>)
+		.filter(Boolean)
+		.reduce((ret: Styles, curr) => {
+			Object.assign(ret, curr)
+			return ret
 		}, {})
-	}
-	return style ?? {}
 }

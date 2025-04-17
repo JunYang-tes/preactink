@@ -3,7 +3,7 @@ import { Styles } from "../styles.js"
 import { DOMElement } from "../dom.js"
 import { useCallback, useMemo } from "preact/hooks"
 import { forwardRef } from 'preact/compat'
-import { mapRef } from "../utils.js"
+import { mapRef, mergeStyle, NestedableStyle } from "../utils.js"
 
 export type BoxStyle = Omit<Styles, 'textWrap'>
 const defaultStyle: BoxStyle = {
@@ -17,7 +17,7 @@ const defaultStyle: BoxStyle = {
 
 export type ViewProps = {
 	ref?: Ref<DOMElement>
-	style?: BoxStyle | Array<BoxStyle | undefined | null>
+	style?: NestedableStyle<BoxStyle>
 	onResize?: (e: { width: number, height: number, node: DOMElement }) => void
 	children?: ComponentChildren
 }
@@ -27,12 +27,10 @@ export const View = forwardRef((props: ViewProps, ref: Ref<DOMElement>) => {
 		if (style == null) {
 			return defaultStyle
 		} else if (Array.isArray(style)) {
-			return style.reverse().reduce((pre: BoxStyle, curr) => {
-				return {
-					...pre,
-					...(curr ?? {})
-				}
-			}, defaultStyle)
+			return {
+				...defaultStyle,
+				...mergeStyle(style)
+			}
 		} else {
 			return {
 				...defaultStyle,
