@@ -112,6 +112,7 @@ class PreactElement implements ContainerNode {
 	}
 	set internal_transform(value: any) {
 		this.node.internal_transform = value
+		PreactElement.scheduleOutput()
 	}
 	setAttribute(key: string, value: any) {
 		if (key === 'style') {
