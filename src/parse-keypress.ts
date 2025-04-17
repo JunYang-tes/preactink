@@ -1,5 +1,5 @@
 // Copied from https://github.com/enquirer/enquirer/blob/36785f3399a41cd61e9d28d1eb9c2fcd73d69b4c/lib/keypress.js
-import {Buffer} from 'node:buffer';
+import { Buffer } from 'node:buffer';
 
 const metaKeyCodeRe = /^(?:\x1b)([a-zA-Z0-9])$/;
 
@@ -209,6 +209,13 @@ const parseKeypress = (s: Buffer | string = ''): ParsedKey => {
 		// meta+character key
 		key.meta = true;
 		key.shift = /^[A-Z]$/.test(parts[1]!);
+		if (s.startsWith('\u001b')) {
+			key.name = s.slice(1)
+			key.sequence = key.name
+		} else {
+			key.name = s
+			key.sequence = s
+		}
 	} else if ((parts = fnKeyRe.exec(s))) {
 		const segs = [...s];
 
