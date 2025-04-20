@@ -560,21 +560,13 @@ const applyBorderStyles = (node: YogaNode, style: Styles): void => {
 	if ('borderStyle' in style) {
 		const borderWidth = style.borderStyle ? 1 : 0;
 
-		if (style.borderTop !== false) {
-			node.setBorder(Yoga.EDGE_TOP, borderWidth);
-		}
+		node.setBorder(Yoga.EDGE_TOP, borderWidth * (style.borderTop === false ? 0 : 1));
 
-		if (style.borderBottom !== false) {
-			node.setBorder(Yoga.EDGE_BOTTOM, borderWidth);
-		}
+		node.setBorder(Yoga.EDGE_BOTTOM, borderWidth * (style.borderBottom === false ? 0 : 1));
 
-		if (style.borderLeft !== false) {
-			node.setBorder(Yoga.EDGE_LEFT, borderWidth);
-		}
+		node.setBorder(Yoga.EDGE_LEFT, borderWidth * (style.borderLeft === false ? 0 : 1));
 
-		if (style.borderRight !== false) {
-			node.setBorder(Yoga.EDGE_RIGHT, borderWidth);
-		}
+		node.setBorder(Yoga.EDGE_RIGHT, borderWidth * (style.borderRight === false ? 0 : 1));
 	}
 };
 
