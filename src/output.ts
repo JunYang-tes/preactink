@@ -96,6 +96,7 @@ export default class Output {
 		});
 	}
 
+
 	get(): {output: string; height: number} {
 		// Initialize output array with a specific set of rows, so that margin/padding at the bottom is preserved
 		const output: StyledChar[][] = [];
@@ -208,7 +209,7 @@ export default class Output {
 						// Some characters take up more than one column. In that case, the following
 						// pixels need to be cleared to avoid printing extra characters
 						const isWideCharacter =
-							character.fullWidth || character.value.length > 1;
+							character.fullWidth;
 
 						if (isWideCharacter) {
 							currentLine[offsetX + 1] = {
