@@ -5,7 +5,9 @@ import { useCallback, useMemo } from "preact/hooks"
 import { forwardRef } from 'preact/compat'
 import { mapRef, mergeStyle, NestedableStyle } from "../utils.js"
 
-export type BoxStyle = Omit<Styles, 'textWrap'>
+export type BoxStyle = Omit<Styles, 'textWrap'> & {
+	background?: string | 'opaque'
+}
 const defaultStyle: BoxStyle = {
 	flexWrap: 'nowrap',
 	flexDirection: 'row',

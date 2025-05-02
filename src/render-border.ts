@@ -4,6 +4,7 @@ import colorize from './colorize.js';
 import {type DOMNode} from './dom.js';
 import type Output from './output.js';
 
+
 const renderBorder = (
 	x: number,
 	y: number,
@@ -43,11 +44,21 @@ const renderBorder = (
 		const showLeftBorder = node.style.borderLeft !== false;
 		const showRightBorder = node.style.borderRight !== false;
 
+		let colorizeBorder = node.style.background
+			? node.style.background === 'opaque'
+				? colorize
+				: (
+					str: string,
+					color: string | undefined,
+					type: 'foreground' | 'background',
+				)=>colorize(colorize(str,color,'foreground'),node.style.background,'background')
+			: colorize
+
 		const contentWidth =
 			width - (showLeftBorder ? 1 : 0) - (showRightBorder ? 1 : 0);
 
 		let topBorder = showTopBorder
-			? colorize(
+			? colorizeBorder(
 					(showLeftBorder ? box.topLeft : '') +
 						box.top.repeat(contentWidth) +
 						(showRightBorder ? box.topRight : ''),
@@ -72,7 +83,7 @@ const renderBorder = (
 		verticalBorderHeight = Math.max(verticalBorderHeight, 0);
 
 		let leftBorder = (
-			colorize(box.left, leftBorderColor, 'foreground') + '\n'
+			colorizeBorder(box.left, leftBorderColor, 'foreground') + '\n'
 		).repeat(verticalBorderHeight);
 
 		if (dimLeftBorderColor) {
@@ -80,7 +91,7 @@ const renderBorder = (
 		}
 
 		let rightBorder = (
-			colorize(box.right, rightBorderColor, 'foreground') + '\n'
+			colorizeBorder(box.right, rightBorderColor, 'foreground') + '\n'
 		).repeat(verticalBorderHeight);
 
 		if (dimRightBorderColor) {
@@ -88,7 +99,7 @@ const renderBorder = (
 		}
 
 		let bottomBorder = showBottomBorder
-			? colorize(
+			? colorizeBorder(
 					(showLeftBorder ? box.bottomLeft : '') +
 						box.bottom.repeat(contentWidth) +
 						(showRightBorder ? box.bottomRight : ''),

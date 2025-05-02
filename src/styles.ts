@@ -306,6 +306,10 @@ export type Styles = {
 	 * @default 'visible'
 	 */
 	readonly overflowY?: 'visible' | 'hidden';
+	/**
+	 * background of box,undefined means transparent
+	 */
+	readonly background?: string | 'opaque'
 };
 
 const applyPositionStyles = (node: YogaNode, style: Styles): void => {

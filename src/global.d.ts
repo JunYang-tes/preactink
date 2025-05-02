@@ -20,7 +20,9 @@ declare namespace Ink {
 		children?: ComponentChildren;
 		key?: Key;
 		ref?: Ref<{ node: DOMElement }>;
-		style?: Except<Styles, 'textWrap'>;
+		style?: Except<Styles, 'textWrap'> & {
+			background?: string | 'opaque'
+		};
 	};
 
 	type Text = {
