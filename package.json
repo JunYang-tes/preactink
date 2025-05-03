@@ -1,6 +1,6 @@
 {
 	"name": "preactink",
-	"version": "0.0.7",
+	"version": "0.0.10",
 	"description": "An ink fork, Preact for CLI",
 	"license": "MIT",
 	"repository": "https://github.com/JunYang-tes/preactink",
@@ -87,7 +87,6 @@
 		"eslint-plugin-react": "^7.37.2",
 		"eslint-plugin-react-hooks": "^5.0.0",
 		"ms": "^2.1.3",
-		"node-pty": "^1.0.0",
 		"p-queue": "^8.0.0",
 		"prettier": "^3.3.3",
 		"sinon": "^19.0.2",
