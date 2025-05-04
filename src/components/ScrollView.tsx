@@ -190,12 +190,12 @@ export const ScrollView = forwardRef(function ScrollView({
 					setTimeout(() => {
 						const { node } = e
 						let borderHeight = node.style.borderStyle ? 2 : 0
-						// if (node.style.borderTop === false) {
-						// 	borderHeight -= 1
-						// }
-						// if (node.style.borderBottom === false) {
-						// 	borderHeight -= 1
-						// }
+						if (node.style.borderTop === false) {
+							borderHeight -= 1
+						}
+						if (node.style.borderBottom === false) {
+							borderHeight -= 1
+						}
 						dispatch({ type: 'SET_HEIGHT', height: e.height - borderHeight });
 					})
 				}}
