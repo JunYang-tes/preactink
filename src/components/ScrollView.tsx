@@ -70,7 +70,10 @@ const reducer = (state: ScrollAreaState, action: ScrollAreaAction) => {
 		case 'SCROLL_TO':
 			return {
 				...state,
-				scrollTop: Math.min(Math.max(0, action.scrollTop), state.innerHeight - state.height),
+				scrollTop: Math.min(
+					Math.max(0, action.scrollTop),
+					Math.max(0, state.innerHeight - state.height)
+				),
 			};
 
 		default:
