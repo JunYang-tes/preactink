@@ -59,12 +59,16 @@ const renderNodeToOutput = (
 		}
 
 		// Left and top positions in Yoga are relative to their parent node
+		const localx = yogaNode.getComputedLeft();
+		const localy = yogaNode.getComputedTop();
 		const x = offsetX + yogaNode.getComputedLeft();
 		const y = offsetY + yogaNode.getComputedTop();
 
 		const bbox: BBox = {
 			left: x,
 			top: y,
+			x: localx,
+			y: localy,
 			width: yogaNode.getComputedWidth(),
 			height: yogaNode.getComputedHeight(),
 		}
@@ -106,7 +110,7 @@ const renderNodeToOutput = (
 		let clipped = false;
 
 		if (node.nodeName === 'ink-box') {
-			renderBg(x,y,node,output);
+			renderBg(x, y, node, output);
 			renderBorder(x, y, node, output);
 
 			const clipHorizontally =

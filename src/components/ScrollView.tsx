@@ -1,4 +1,4 @@
-import { useReducer, useEffect, useRef, useImperativeHandle } from 'preact/hooks'
+import { useReducer, useEffect, useRef, useImperativeHandle, useMemo } from 'preact/hooks'
 import { View, ViewProps } from './View.js'
 import Text from './Text.js'
 import { DOMElement } from '../dom.js';
@@ -19,7 +19,10 @@ type ScrollAreaAction =
 	| { type: 'SET_HEIGHT'; height: number }
 	| { type: 'SCROLL_DOWN' }
 	| { type: 'SCROLL_UP' }
-	| { type: 'SCROLL_TO', scrollTop: number }
+	| {
+		type: 'SCROLL_TO', scrollTop: number,
+		relative?: boolean
+	}
 	| { type: 'PAGE_DOWN' }
 	| { type: 'PAGE_UP' }
 
@@ -68,10 +71,11 @@ const reducer = (state: ScrollAreaState, action: ScrollAreaAction) => {
 					),
 			};
 		case 'SCROLL_TO':
+			const value = action.relative ? state.scrollTop + action.scrollTop : action.scrollTop
 			return {
 				...state,
 				scrollTop: Math.min(
-					Math.max(0, action.scrollTop),
+					Math.max(0, value),
 					Math.max(0, state.innerHeight - state.height)
 				),
 			};
@@ -93,9 +97,48 @@ export type ScrollViewInstance = {
 	scrollDown: () => void,
 	scrollUp: () => void,
 	scrollToTop: () => void,
-	scrollToEnd: () => void
+	scrollToEnd: () => void,
+	scrollTo: (scrollTop: number, relative?: boolean) => void,
 	pageUp: () => void,
 	pageDown: () => void
+}
+
+
+const node2scroll = new WeakMap<DOMElement, ScrollViewInstance>()
+
+/**
+ * Scroll an element into view, nested scrollview is not considered
+ * @param ele the element
+ */
+export function scrollIntoView(ele: DOMElement) {
+	let y = 0;
+	let i: DOMElement | undefined = ele
+	while (i != null) {
+		y += (i.bbox?.y || 0)
+		let p: DOMElement | undefined = i.parentNode
+		if (p) {
+			if (node2scroll.has(p)) {
+				let borderHeight = p.style.borderStyle ? 2 : 0
+				if (p.style.borderTop === false) {
+					borderHeight -= 1
+				}
+				if (p.style.borderBottom === false) {
+					borderHeight -= 1
+				}
+				const height = (p.bbox?.height || 0) - borderHeight
+				const inside = y > 0 && y < height
+
+				if (!inside) {
+					node2scroll.get(p)?.scrollTo(y
+						- (p.style.borderTop !== false ? 1 : 0)
+						, true)
+				}
+				break
+			}
+		}
+		i = p
+	}
+
 }
 
 export const ScrollView = forwardRef(function ScrollView({
@@ -137,8 +180,7 @@ export const ScrollView = forwardRef(function ScrollView({
 	// 		innerHeight: dimensions.height,
 	// 	});
 	// }, [children]);
-
-	useImperativeHandle(ref, () => {
+	const instance = useMemo(() => {
 		return {
 			scrollDown: () => {
 				dispatch({
@@ -171,9 +213,21 @@ export const ScrollView = forwardRef(function ScrollView({
 					type: 'SCROLL_TO',
 					scrollTop: Number.POSITIVE_INFINITY
 				})
+			},
+			scrollTo: (scrollTop: number, relative?: boolean) => {
+				dispatch({
+					type: 'SCROLL_TO',
+					relative,
+					scrollTop
+				})
 			}
 		}
+
 	}, [dispatch])
+
+	useImperativeHandle(ref, () => {
+		return instance
+	}, [dispatch, instance])
 
 
 
@@ -188,7 +242,12 @@ export const ScrollView = forwardRef(function ScrollView({
 				}}
 		>
 			<View
-				ref={scrollContainerRef}
+				ref={(n) => {
+					scrollContainerRef.current = n
+					if (n) {
+						node2scroll.set(n, instance)
+					}
+				}}
 				onResize={(e) => {
 					setTimeout(() => {
 						const { node } = e
