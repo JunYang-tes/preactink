@@ -1,18 +1,27 @@
 import { useRef } from 'preact/hooks';
-import { render, ScrollView, ScrollViewInstance, Text, useInput, View } from '../src/index.js';
+import { DOMElement, render, ScrollView, scrollIntoView, ScrollViewInstance, Text, useInput, View } from '../src/index.js';
 
 function App() {
 	const scroll = useRef<ScrollViewInstance | null>(null)
+	const node1 = useRef<DOMElement | null>(null)
+	const node2 = useRef<DOMElement | null>(null)
 
 	useInput((_input, key) => {
 		if (key.downArrow || _input == 'j') {
 			scroll.current?.scrollDown()
 		}
+		if (_input == '1') {
+			debugger
+			scrollIntoView(node1.current!)
+		}
+		if(_input == '2') {
+			scrollIntoView(node2.current!)
+		}
 
 		if (key.upArrow || _input == 'k') {
 			scroll.current?.scrollUp()
 		}
-		if(_input == 'e') {
+		if (_input == 'e') {
 			scroll.current?.scrollToEnd()
 		}
 
@@ -44,11 +53,33 @@ function App() {
 			<View style={{ borderStyle: 'single', flexShrink: 0 }}>
 				<Text>Word</Text>
 			</View>
+			<View ref={node1} style={{ borderStyle: 'doubleSingle' }}>
+				<Text>hello</Text>
+				<View
+					ref={node2}
+					style={{
+						borderStyle: 'single', flexShrink: 0,
+						marginTop: 4
+					}}>
+					<Text>World</Text>
+				</View>
+			</View>
+			<View style={{ flexDirection: 'column' }}>
+				<Text>1</Text>
+				<Text>2</Text>
+				<Text>3</Text>
+				<Text>4</Text>
+				<Text>5</Text>
+				<Text>6</Text>
+				<Text>7</Text>
+				<Text>8</Text>
+				<Text>9</Text>
+			</View>
 		</ScrollView>
 	);
 }
 
-render(<App />,{
+render(<App />, {
 	alternativeScreen: true
 });
 
