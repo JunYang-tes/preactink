@@ -29,6 +29,8 @@ export type NodeNames = ElementNames | TextName;
 
 export type BBox = {
 	left: number,
+	y: number,
+	x: number,
 	top: number,
 	width: number,
 	height: number
