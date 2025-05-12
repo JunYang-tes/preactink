@@ -242,7 +242,7 @@ export const ScrollView = forwardRef(function ScrollView({
 				}}
 		>
 			<View
-				ref={(n) => {
+				ref={(n:any) => {
 					scrollContainerRef.current = n
 					if (n) {
 						node2scroll.set(n, instance)
