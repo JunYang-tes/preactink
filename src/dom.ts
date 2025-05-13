@@ -138,14 +138,9 @@ export const insertBeforeNode = (
 	const index = node.childNodes.indexOf(beforeChildNode as DOMNode);
 	if (index >= 0) {
 		node.childNodes.splice(index, 0, newChildNode);
-		if (newChildNode.yogaNode) {
-			node.yogaNode?.insertChild(newChildNode.yogaNode, index);
-		}
-
-		return;
+	} else {
+		node.childNodes.push(newChildNode);
 	}
-
-	node.childNodes.push(newChildNode);
 
 	if (newChildNode.yogaNode &&
 		// in case Text inside Text, outer Text already have a measureFunction,
