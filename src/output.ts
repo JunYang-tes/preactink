@@ -1,4 +1,5 @@
-import sliceAnsi from 'slice-ansi';
+// @ts-ignore
+import sliceAnsi from './slice-ansi.js';
 import stringWidth from 'string-width';
 import widestLine from 'widest-line';
 import {
@@ -7,7 +8,7 @@ import {
 	styledCharsToString,
 	tokenize,
 } from '@alcalzone/ansi-tokenize';
-import {type OutputTransformer} from './render-node-to-output.js';
+import { type OutputTransformer } from './render-node-to-output.js';
 
 /**
  * "Virtual" output class
@@ -56,7 +57,7 @@ export default class Output {
 	private readonly operations: Operation[] = [];
 
 	constructor(options: Options) {
-		const {width, height} = options;
+		const { width, height } = options;
 
 		this.width = width;
 		this.height = height;
@@ -66,9 +67,9 @@ export default class Output {
 		x: number,
 		y: number,
 		text: string,
-		options: {transformers: OutputTransformer[]},
+		options: { transformers: OutputTransformer[] },
 	): void {
-		const {transformers} = options;
+		const { transformers } = options;
 
 		if (!text) {
 			return;
@@ -97,7 +98,7 @@ export default class Output {
 	}
 
 
-	get(): {output: string; height: number} {
+	get(): { output: string; height: number } {
 		// Initialize output array with a specific set of rows, so that margin/padding at the bottom is preserved
 		const output: StyledChar[][] = [];
 
@@ -128,8 +129,8 @@ export default class Output {
 			}
 
 			if (operation.type === 'write') {
-				const {text, transformers} = operation;
-				let {x, y} = operation;
+				const { text, transformers } = operation;
+				let { x, y } = operation;
 				let lines = text.split('\n');
 
 				const clip = clips.at(-1);
@@ -164,6 +165,9 @@ export default class Output {
 							const from = x < clip.x1! ? clip.x1! - x : 0;
 							const width = stringWidth(line);
 							const to = x + width > clip.x2! ? clip.x2! - x : width;
+							if(from === 0 && to === width) {
+								return line
+							}
 
 							return sliceAnsi(line, from, to);
 						});
